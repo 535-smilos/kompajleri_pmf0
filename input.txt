@@ -1,0 +1,11 @@
+/*ovo je komentar 
+u vise linija*/
+STRING string
+IF
+1234235324 0x1FA
+0.2133431
+214
+0.0 (!!!);
+/*fdsgsg
+dgfdsgfgdfgdf*/
+//amogus
