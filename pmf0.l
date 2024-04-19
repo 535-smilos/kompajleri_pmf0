@@ -47,7 +47,8 @@ int kolona=1;//karakter u koloni
 (0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {printf("HEX: vrijednost %s\n", yytext); kolona+=yyleng;} //heksadekadni
 [0-9]+\.[0-9]* {printf("DOUBLE: vrijednost %s\n", yytext); kolona+=yyleng;} //double
 [0-9]+\.[0-9]*[eE][+-]?[0-9]+ {printf("DOUBLE sa exp: vrijednost %s\n", yytext); kolona+=yyleng;} //double sa exp
-    
+[a-zA-Z_][a-zA-Z0-9_]{0,29}  {printf("IDENTIFIKATOR: vrijednost %s\n", yytext); kolona+=yyleng;} //identifikator 
+
 "<="        {printf("operator: <=\n"); kolona+=yyleng;} //operatori
 "<"         {printf("operator: <\n"); kolona+=yyleng;}
 ">="        {printf("operator: >=\n"); kolona+=yyleng;}
@@ -70,8 +71,30 @@ int kolona=1;//karakter u koloni
 "("     {printf("(\n"); kolona+=yyleng;}
 ")"     {printf(")\n"); kolona+=yyleng;}
 
+    /*greske!*/
 
-.       {printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona); kolona+=yyleng;}
+[a-zA-Z_][a-zA-Z0-9_]{0,29}[a-zA-Z0-9_]     {
+    printf("Greska! Identifikator: %s prevazilazi duzinu od 30 karaktera na liniji: %d, koloni:%d\n", yytext, yylineno, kolona); 
+    kolona+=yyleng;}
+
+(0x|0X)[^a-fA-F0-9]   {
+    printf("Greska! Invalidan heksadecimalni broj na liniji(ne sadrzi nista posle 0x/X): %d, koloni: %d\n", yylineno, kolona); 
+    kolona+=yyleng;}
+
+(0x|0X)[1-9G-Zg-z][0-9G-Zg-z]*      {
+    printf("Greska! Invalidan heksadecimalni broj na liniji: %d, koloni: %d\n", yylineno, kolona); 
+    kolona+=yyleng;}
+
+\.[0-9]+                      {
+    printf("Greska! Invalidan double broj bez vodece nule na liniji: %d, koloni: %d\n", yylineno, kolona); 
+    kolona+=yyleng;}
+
+[0-9]+(\.[0-9]+)?[eE][+-]?[0-9]+    {
+    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
+    kolona+=yyleng;}
+
+.       {
+    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona); kolona+=yyleng;}
 
 <KOMENTAR_ULINIJI>{
 "\n"    {printf("Komentar u liniji!\n");
