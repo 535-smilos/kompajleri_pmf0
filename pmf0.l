@@ -45,7 +45,8 @@ int kolona=1;//karakter u koloni
 \"[^"\n]*\"     {printf("STRING: vrijednost %s\n", yytext); kolona+=yyleng;}    //regularni izrazi
 0|[1-9][0-9]*   {printf("INT: vrijednost %s\n", yytext);kolona+=yyleng;}    //int 
 (0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {printf("HEX: vrijednost %s\n", yytext); kolona+=yyleng;} //heksadekadni
-(0.)?[0-9]* {printf("DOUBLE: vrijednost %s\n", yytext); kolona+=yyleng;} //double
+[0-9]+\.[0-9]* {printf("DOUBLE: vrijednost %s\n", yytext); kolona+=yyleng;} //double
+[0-9]+\.[0-9]*[eE][+-]?[0-9]+ {printf("DOUBLE sa exp: vrijednost %s\n", yytext); kolona+=yyleng;} //double sa exp
     
 "<="        {printf("operator: <=\n"); kolona+=yyleng;} //operatori
 "<"         {printf("operator: <\n"); kolona+=yyleng;}
