@@ -93,6 +93,10 @@ int kolona=1;//karakter u koloni
     printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
     kolona+=yyleng;}
 
+\"[^"\n]*$ { 
+    printf("Greska! Nezatvoren string: %s na liniji: %d, koloni: %d\n", yytext, yylineno, kolona); 
+    kolona+=yyleng; }
+
 .       {
     printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona); kolona+=yyleng;}
 
