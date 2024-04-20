@@ -81,7 +81,7 @@ int kolona=1;//karakter u koloni
     printf("Greska! Invalidan heksadecimalni broj na liniji(ne sadrzi nista posle 0x/X): %d, koloni: %d\n", yylineno, kolona); 
     kolona+=yyleng;}
 
-(0x|0X)[1-9G-Zg-z][0-9G-Zg-z]*      {
+(0x|0X)[1-9A-Za-z][0-9A-Za-z]*      {
     printf("Greska! Invalidan heksadecimalni broj na liniji: %d, koloni: %d\n", yylineno, kolona); 
     kolona+=yyleng;}
 
@@ -90,6 +90,10 @@ int kolona=1;//karakter u koloni
     kolona+=yyleng;}
 
 [0-9]+(\.[0-9]+)?[eE][+-]?[0-9]+    {
+    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
+    kolona+=yyleng;}
+
+[0-9]+\.[0-9]*[eE][+-]? {
     printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
     kolona+=yyleng;}
 
