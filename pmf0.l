@@ -9,6 +9,7 @@ int kolona=1;//karakter u koloni
 %x KOMENTAR_VISELINIJA
 
 %option yylineno
+%option noyywrap
 
 %% 
 
@@ -97,7 +98,7 @@ int kolona=1;//karakter u koloni
     printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
     kolona+=yyleng;}
 
-\"[^"\n]*$ { 
+\"[^"\n]* { 
     printf("Greska! Nezatvoren string: %s na liniji: %d, koloni: %d\n", yytext, yylineno, kolona); 
     kolona+=yyleng; }
 
