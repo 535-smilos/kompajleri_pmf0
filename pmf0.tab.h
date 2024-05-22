@@ -42,44 +42,45 @@
      T_SC = 258,
      T_INT = 259,
      T_DOUBLE = 260,
-     T_HEX = 261,
-     T_STR = 262,
-     T_BOOLT = 263,
-     T_BOOLF = 264,
-     T_ID = 265,
-     T_PLUS = 266,
-     T_MINUS = 267,
-     T_MUL = 268,
-     T_DIV = 269,
-     T_MOD = 270,
-     T_DIV2 = 271,
-     T_MANJE = 272,
-     T_VISE = 273,
-     T_JEDNAKO = 274,
-     T_MANJEJEDNAKO = 275,
-     T_VISEJEDNAKO = 276,
-     T_JEJEDNAKO = 277,
-     T_RAZLICITO = 278,
-     T_AND = 279,
-     T_OR = 280,
-     T_NEGACIJA = 281,
-     T_ZAREZ = 282,
-     T_TACKA = 283,
-     T_LEFTP = 284,
-     T_RIGHTP = 285,
-     T_FOR = 286,
-     T_WHILE = 287,
-     T_BREAK = 288,
-     T_IF = 289,
-     T_ELSE = 290,
-     T_INTID = 291,
-     T_STRID = 292,
-     T_BOOLID = 293,
-     T_DOUBLEID = 294,
-     T_RETURN = 295,
-     T_DO = 296,
-     T_END = 297,
-     T_EQ = 298
+     T_DBLEXP = 261,
+     T_HEX = 262,
+     T_STR = 263,
+     T_BOOLT = 264,
+     T_BOOLF = 265,
+     T_ID = 266,
+     T_PLUS = 267,
+     T_MINUS = 268,
+     T_MUL = 269,
+     T_DIV = 270,
+     T_MOD = 271,
+     T_DIV2 = 272,
+     T_MANJE = 273,
+     T_VISE = 274,
+     T_JEDNAKO = 275,
+     T_MANJEJEDNAKO = 276,
+     T_VISEJEDNAKO = 277,
+     T_JEJEDNAKO = 278,
+     T_RAZLICITO = 279,
+     T_AND = 280,
+     T_OR = 281,
+     T_NEGACIJA = 282,
+     T_ZAREZ = 283,
+     T_TACKA = 284,
+     T_LEFTP = 285,
+     T_RIGHTP = 286,
+     T_FOR = 287,
+     T_WHILE = 288,
+     T_BREAK = 289,
+     T_IF = 290,
+     T_ELSE = 291,
+     T_INTID = 292,
+     T_STRID = 293,
+     T_BOOLID = 294,
+     T_DOUBLEID = 295,
+     T_RETURN = 296,
+     T_DO = 297,
+     T_END = 298,
+     T_EQ = 299
    };
 #endif
 
@@ -95,6 +96,7 @@ typedef union YYSTYPE
     int int_value;
     char* string_value;
     double double_value;
+    double double_exp;
     long hex_value;
     bool bool_value;
     char* ident;
@@ -102,7 +104,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 106 "pmf0.tab.h"
+#line 108 "pmf0.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

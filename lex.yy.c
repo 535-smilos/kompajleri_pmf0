@@ -955,17 +955,17 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 50 "pmf0.l"
-{long val=strtol(yytext+2, NULL, 16);yylval.hex_value=val; kolona+=yyleng; return T_HEX;} //heksadekadni
+{unsigned char a; sscanf(yytext, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 51 "pmf0.l"
-{double num;sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
+{double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 52 "pmf0.l"
-{printf("DOUBLE sa exp: vrijednost %s\n", yytext); kolona+=yyleng;} //double sa exp
+{double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; kolona+=yyleng; return T_DBLEXP;} //double sa exp
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
