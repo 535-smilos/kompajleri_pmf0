@@ -35,8 +35,8 @@ int kolona=1;//karakter u koloni
 "DO"        {kolona+=yyleng; return T_DO;}
 "BREAK"     {kolona+=yyleng; return T_BREAK;}
 "WRITE"     {printf("WRITE\n");kolona+=yyleng;}
-"TRUE"      {kolona+=yyleng; return T_BOOLT;}
-"FALSE"     {kolona+=yyleng; return T_BOOLF;}
+"true"      {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLT;}
+"false"     {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLF;}
 "SKIP"      {printf("SKIP\n");kolona+=yyleng;}
 "READ"      {printf("READ\n");kolona+=yyleng;}
 "LET"       {printf("LET\n");kolona+=yyleng;}

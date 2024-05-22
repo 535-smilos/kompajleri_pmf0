@@ -68,12 +68,16 @@
 %type <hex_value>exp4
 %type <hex_value>stat4
 
+%type <bool_value>exp5
+%type <bool_value>stat5
+
 %%
 //odje ide gramatika!!!
 S: S stat { }
     | S stat2 { }
     | S stat3 { }
     | S stat4 { }
+    | S stat5 { }
     |
 ;
 
@@ -90,7 +94,11 @@ stat3: exp3 T_SC {printf("%e\n", $1);}
 ;
 
 stat4: exp4 T_SC {printf("%x\n", $1);}
-    | T_ID T_EQ exp4 T_SC {printf("%s=%x\n", $1, $3);}
+     | T_ID T_EQ exp4 T_SC {printf("%s=%x\n", $1, $3);}
+;
+
+stat5: exp5 T_SC {printf("%d\n", $1);}
+     | T_ID T_EQ exp5 T_SC {printf("%s=%d\n", $1, $3);}
 ;
 
 exp:
@@ -128,6 +136,11 @@ exp4:
     | exp4 T_DIV exp4             { $$=$1/$3; }
     | T_LEFTP exp4 T_RIGHTP       { $$=$2;}
     | T_HEX                       { $$=$1;}
+;
+
+exp5:
+    T_BOOLT     { $$=$1; }
+    | T_BOOLF   { $$=$1; }
 ;
 
 
