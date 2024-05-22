@@ -955,7 +955,7 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 50 "pmf0.l"
-{unsigned char a; sscanf(yytext, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
+{int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
 	YY_BREAK
 case 30:
 YY_RULE_SETUP

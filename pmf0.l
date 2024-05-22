@@ -47,7 +47,7 @@ int kolona=1;//karakter u koloni
 
 \"[^"\n]*\"     {yylval.string_value=yytext; kolona+=yyleng; return T_STR;}    //regularni izrazi
 0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);kolona+=yyleng; return T_INT;}    //int 
-(0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {unsigned char a; sscanf(yytext, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
+(0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
 [0-9]+\.[0-9]* {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
 [0-9]+\.[0-9]*[eE][+-]?[0-9]+ {double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; kolona+=yyleng; return T_DBLEXP;} //double sa exp
 [a-zA-Z_][a-zA-Z0-9_]{0,29}  {yylval.ident=(char*)strdup(yytext); kolona+=yyleng; return T_ID;} //identifikator 

@@ -97,7 +97,7 @@ typedef union YYSTYPE
     char* string_value;
     double double_value;
     double double_exp;
-    long hex_value;
+    int hex_value;
     bool bool_value;
     char* ident;
 

@@ -12,7 +12,7 @@
     char* string_value;
     double double_value;
     double double_exp;
-    long hex_value;
+    int hex_value;
     bool bool_value;
     char* ident;
 }
@@ -26,6 +26,7 @@
 %token <string_value>T_STR
 %token <bool_value>T_BOOLT T_BOOLF
 %token <ident>T_ID
+
 %token T_PLUS T_MINUS
 %token T_MUL T_DIV T_MOD
 %token T_DIV2
@@ -64,12 +65,15 @@
 %type <double_exp>exp3
 %type <double_exp>stat3
 
+%type <hex_value>exp4
+%type <hex_value>stat4
 
 %%
 //odje ide gramatika!!!
 S: S stat { }
     | S stat2 { }
     | S stat3 { }
+    | S stat4 { }
     |
 ;
 
@@ -83,6 +87,11 @@ stat2: exp2 T_SC {printf("%f\n", $1);}
 
 stat3: exp3 T_SC {printf("%e\n", $1);}
      | T_ID T_EQ exp3 T_SC {printf("%s=%e\n", $1, $3);}
+;
+
+stat4: exp4 T_SC {printf("%x\n", $1);}
+    | T_ID T_EQ exp4 T_SC {printf("%s=%x\n", $1, $3);}
+;
 
 exp:
     exp T_PLUS exp              { $$=$1+$3; }
@@ -110,6 +119,15 @@ exp3:
     | exp3 T_DIV exp3             { $$=$1/$3; }
     | T_LEFTP exp3 T_RIGHTP       { $$=$2;}
     | T_DBLEXP                    { $$=$1;}
+;
+
+exp4:
+    exp4 T_PLUS exp4              { $$=$1+$3; }
+    | exp4 T_MINUS exp4           { $$=$1-$3; }
+    | exp4 T_MUL exp4             { $$=$1*$3; }
+    | exp4 T_DIV exp4             { $$=$1/$3; }
+    | T_LEFTP exp4 T_RIGHTP       { $$=$2;}
+    | T_HEX                       { $$=$1;}
 ;
 
 
