@@ -45,7 +45,7 @@ int kolona=1;//karakter u koloni
 "IN"        {printf("IN\n");kolona+=yyleng;}
 "END"       {kolona+=yyleng; return T_END;}
 
-\"[^"\n]*\"     {yylval.string_value=strdup(yytext); kolona+=yyleng; return T_STR;}    //regularni izrazi
+\"[^"\n]*\"     {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; kolona+=yyleng; return T_STR;}    //regularni izrazi
 0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);kolona+=yyleng; return T_INT;}    //int 
 (0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
 [0-9]+\.[0-9]* {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
