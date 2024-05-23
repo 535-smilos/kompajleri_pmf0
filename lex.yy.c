@@ -953,7 +953,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 48 "pmf0.l"
-{yylval.string_value=yytext; kolona+=yyleng; return T_STR;}    //regularni izrazi
+{yylval.string_value=strdup(yytext); kolona+=yyleng; return T_STR;}    //regularni izrazi
 	YY_BREAK
 case 28:
 YY_RULE_SETUP

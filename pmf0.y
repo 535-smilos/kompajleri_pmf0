@@ -2,8 +2,51 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <stdbool.h>
-        
+    #include <string.h>
+
+    struct Promjenljiva{
+        char* id;
+        int val;
+        struct Promjenljiva* next;
+    };
+
     void yyerror(const char* s);
+
+    struct Promjenljiva* glava_tabele=0;
+
+    void addNewNode(char* id, int val){
+        struct Promjenljiva* new_node=(struct Promjenljiva*)malloc(sizeof(struct Promjenljiva));
+        new_node->id=(char*)strdup(id);
+        new_node->val=val;
+        new_node->next=glava_tabele;
+        glava_tabele=new_node;
+    }
+
+    struct Promjenljiva* findVariable(char* id){
+        struct Promjenljiva* curr=glava_tabele;
+        while(curr!=0){
+            if(strcmp(id, curr->id)==0){
+                return curr;
+            }
+            curr=curr->next;
+        }
+        return 0;
+    }
+    
+    void setVariableValue(struct Promjenljiva* prom, char* id, int val){
+        if(prom==0){
+            addNewNode(id, val);
+        } else{
+            prom->val=val;
+        }
+    }
+
+    int getVariableValue(char* id){
+        struct Promjenljiva* prom=findVariable(id);
+        if(prom==0) return 0;
+        return prom->val;
+    }
+
 
 %}
 
@@ -25,7 +68,7 @@
 %token <hex_value>T_HEX
 %token <string_value>T_STR
 %token <bool_value>T_BOOLT T_BOOLF
-%token <ident>T_ID
+%token <ident> T_ID T_INTID T_BOOLID T_STRID T_DOUBLEID
 
 %token T_PLUS T_MINUS
 %token T_MUL T_DIV T_MOD
@@ -42,10 +85,6 @@
 %token T_BREAK
 %token T_IF
 %token T_ELSE
-%token T_INTID
-%token T_STRID
-%token T_BOOLID
-%token T_DOUBLEID
 %token T_RETURN
 %token T_DO
 %token T_END
@@ -53,6 +92,7 @@
 
 %left T_PLUS T_MINUS
 %left T_MUL T_DIV T_MOD
+%nonassoc T_EQ T_RAZLICITO T_JEJEDNAKO
 %left T_MANJE T_MANJEJEDNAKO T_VISE T_VISEJEDNAKO
 %left T_AND T_OR
 
@@ -71,6 +111,9 @@
 %type <bool_value>exp5
 %type <bool_value>stat5
 
+%type <string_value>exp6
+%type <string_value>stat6
+
 %%
 //odje ide gramatika!!!
 S: S stat { }
@@ -78,11 +121,15 @@ S: S stat { }
     | S stat3 { }
     | S stat4 { }
     | S stat5 { }
+    | S stat6 { }
     |
 ;
 
 stat: exp T_SC {printf("%d\n", $1);}
-    | T_ID T_EQ exp T_SC {printf("%s=%d\n", $1, $3);}
+    | T_ID T_EQ exp T_SC {/*printf("%s=%d\n", $1, $3);*/
+                            struct Promjenljiva* prom=findVariable($1);
+                            setVariableValue(prom, $1, $3);
+                         }
 ;
 
 stat2: exp2 T_SC {printf("%f\n", $1);}
@@ -101,14 +148,25 @@ stat5: exp5 T_SC {printf("%d\n", $1);}
      | T_ID T_EQ exp5 T_SC {printf("%s=%d\n", $1, $3);}
 ;
 
+stat6: exp6 T_SC {printf("%s\n", $1);}
+     | T_ID T_EQ exp6 T_SC {printf("%s=%s\n", $1, $3);}
+;
+
 exp:
     exp T_PLUS exp              { $$=$1+$3; }
     | exp T_MINUS exp           { $$=$1-$3; }
     | exp T_MUL exp             { $$=$1*$3; }
     | exp T_DIV exp             { $$=$1/$3; }
     | exp T_MOD exp             { $$=$1%$3; }
+    | exp T_JEJEDNAKO exp       { $$=$1==$3; }
+    | exp T_MANJE exp           { $$=$1<$3; }
+    | exp T_VISE exp            { $$=$1>$3; }
+    | exp T_MANJEJEDNAKO exp    { $$=$1<=$3; }
+    | exp T_VISEJEDNAKO exp     { $$=$1>=$3; }
+    | exp T_RAZLICITO exp       { $$=$1!=$3; }
     | T_LEFTP exp T_RIGHTP      { $$=$2;}
     | T_INT                     { $$=$1;}
+    | T_ID                   { $$=getVariableValue($1); }
 ;
 
 exp2:
@@ -116,6 +174,12 @@ exp2:
     | exp2 T_MINUS exp2           { $$=$1-$3; }
     | exp2 T_MUL exp2             { $$=$1*$3; }
     | exp2 T_DIV exp2             { $$=$1/$3; }
+    | exp2 T_JEJEDNAKO exp2       { $$=$1==$3; }
+    | exp2 T_MANJE exp2           { $$=$1<$3; }
+    | exp2 T_VISE exp2            { $$=$1>$3; }
+    | exp2 T_MANJEJEDNAKO exp2    { $$=$1<=$3; }
+    | exp2 T_VISEJEDNAKO exp2     { $$=$1>=$3; }
+    | exp2 T_RAZLICITO exp2       { $$=$1!=$3; }
     | T_LEFTP exp2 T_RIGHTP       { $$=$2;}
     | T_DOUBLE                    { $$=$1;}
 ;
@@ -125,6 +189,12 @@ exp3:
     | exp3 T_MINUS exp3           { $$=$1-$3; }
     | exp3 T_MUL exp3             { $$=$1*$3; }
     | exp3 T_DIV exp3             { $$=$1/$3; }
+    | exp3 T_JEJEDNAKO exp3       { $$=$1==$3; }
+    | exp3 T_MANJE exp3           { $$=$1<$3; }
+    | exp3 T_VISE exp3            { $$=$1>$3; }
+    | exp3 T_MANJEJEDNAKO exp3    { $$=$1<=$3; }
+    | exp3 T_VISEJEDNAKO exp3     { $$=$1>=$3; }
+    | exp3 T_RAZLICITO exp3       { $$=$1!=$3; }
     | T_LEFTP exp3 T_RIGHTP       { $$=$2;}
     | T_DBLEXP                    { $$=$1;}
 ;
@@ -134,6 +204,12 @@ exp4:
     | exp4 T_MINUS exp4           { $$=$1-$3; }
     | exp4 T_MUL exp4             { $$=$1*$3; }
     | exp4 T_DIV exp4             { $$=$1/$3; }
+    | exp4 T_JEJEDNAKO exp4       { $$=$1==$3; }
+    | exp4 T_MANJE exp4           { $$=$1<$3; }
+    | exp4 T_VISE exp4            { $$=$1>$3; }
+    | exp4 T_MANJEJEDNAKO exp4    { $$=$1<=$3; }
+    | exp4 T_VISEJEDNAKO exp4     { $$=$1>=$3; }
+    | exp4 T_RAZLICITO exp4       { $$=$1!=$3; }
     | T_LEFTP exp4 T_RIGHTP       { $$=$2;}
     | T_HEX                       { $$=$1;}
 ;
@@ -143,6 +219,9 @@ exp5:
     | T_BOOLF   { $$=$1; }
 ;
 
+exp6:
+    T_STR { $$=strdup($1); }
+;
 
 %%
 
