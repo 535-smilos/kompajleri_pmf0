@@ -12,18 +12,18 @@
 
     void yyerror(const char* s);
 
-    struct Promjenljiva* glava=0;
+    struct Promjenljiva* glava_tabele=0;
 
     void addNewNode(char* id, int val){
         struct Promjenljiva* new_node=(struct Promjenljiva*)malloc(sizeof(struct Promjenljiva));
         new_node->id=(char*)strdup(id);
         new_node->val=val;
-        new_node->next=glava;
-        glava=new_node;
+        new_node->next=glava_tabele;
+        glava_tabele=new_node;
     }
 
     struct Promjenljiva* findVariable(char* id){
-        struct Promjenljiva* curr=glava;
+        struct Promjenljiva* curr=glava_tabele;
         while(curr!=0){
             if(strcmp(id, curr->id)==0){
                 return curr;
