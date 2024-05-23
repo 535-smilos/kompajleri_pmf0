@@ -5,6 +5,12 @@ int kolona=1;//karakter u koloni
 #include <string.h>
 #include <stdbool.h>
 #include "pmf0.tab.h"
+#include "greske.h"
+
+#define YYLTYPE yylloc
+
+#define YY_USER_ACTION \
+    kolona += yyleng;
 %}
 
 %x KOMENTAR_ULINIJI
@@ -77,35 +83,35 @@ int kolona=1;//karakter u koloni
     /*greske!*/
 
 [a-zA-Z_][a-zA-Z0-9_]{0,29}[a-zA-Z0-9_]     {
-    printf("Greska! Identifikator: %s prevazilazi duzinu od 30 karaktera na liniji: %d, koloni:%d\n", yytext, yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanIdentifikator(yytext, yylineno, kolona-yyleng);
+}
 
 (0x|0X)[^a-fA-F0-9]   {
-    printf("Greska! Invalidan heksadecimalni broj na liniji(ne sadrzi nista posle 0x/X): %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanHex1(yytext, yylineno, kolona-yyleng);
+}
 
 (0x|0X)[1-9A-Za-z][0-9A-Za-z]*      {
-    printf("Greska! Invalidan heksadecimalni broj na liniji: %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanHex2(yytext, yylineno, kolona-yyleng);
+}
 
 \.[0-9]+                      {
-    printf("Greska! Invalidan double broj bez vodece nule na liniji: %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanDouble1(yytext, yylineno, kolona-yyleng);
+}
 
 [0-9]+(\.[0-9]+)?[eE][+-]?[0-9]+    {
-    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
-    kolona+=yyleng;}
+    invalidanDExp1(yytext, yylineno, kolona-yyleng);
+}
 
 [0-9]+\.[0-9]*[eE][+-]? {
-    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
-    kolona+=yyleng;}
+    invalidanDExp2(yytext, yylineno, kolona-yyleng);
+}
 
 \"[^"\n]* { 
-    printf("Greska! Nezatvoren string: %s na liniji: %d, koloni: %d\n", yytext, yylineno, kolona); 
-    kolona+=yyleng; }
+    invalidanString(yytext, yylineno, kolona-yyleng);
+ }
 
 .       {
-    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona); kolona+=yyleng;}
+    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng);}
 
 <KOMENTAR_ULINIJI>{
 "\n"    {printf("Komentar u liniji!\n");

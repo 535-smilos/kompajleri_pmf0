@@ -571,11 +571,17 @@ int kolona=1;//karakter u koloni
 #include <string.h>
 #include <stdbool.h>
 #include "pmf0.tab.h"
+#include "greske.h"
+
+#define YYLTYPE yylloc
+
+#define YY_USER_ACTION \
+    kolona += yyleng;
 #define KOMENTAR_ULINIJI 1
 
 #define KOMENTAR_VISELINIJA 2
 
-#line 579 "lex.yy.c"
+#line 585 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -726,10 +732,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 16 "pmf0.l"
+#line 22 "pmf0.l"
 
 
-#line 733 "lex.yy.c"
+#line 739 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -822,352 +828,352 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 18 "pmf0.l"
+#line 24 "pmf0.l"
 { kolona += yyleng; } //ucitavanje praznine sabira pomjeraj duzine broja praznina
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 19 "pmf0.l"
+#line 25 "pmf0.l"
 { kolona = 1; } //resetuje se jer smo presli u novi red, pa citamo ponovo od pocetka!
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "pmf0.l"
+#line 27 "pmf0.l"
 {BEGIN(KOMENTAR_ULINIJI);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 "pmf0.l"
+#line 28 "pmf0.l"
 {BEGIN(KOMENTAR_VISELINIJA);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 24 "pmf0.l"
+#line 30 "pmf0.l"
 {printf("TYPE: STRING\n"); kolona+=yyleng;} //tipovi podataka
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 25 "pmf0.l"
+#line 31 "pmf0.l"
 {printf("TYPE: BOOLEAN\n");kolona+=yyleng;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 26 "pmf0.l"
+#line 32 "pmf0.l"
 {printf("TYPE: DOUBLE\n");kolona+=yyleng;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 27 "pmf0.l"
+#line 33 "pmf0.l"
 {printf("TYPE: INT\n");kolona+=yyleng;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "pmf0.l"
+#line 35 "pmf0.l"
 {kolona+=yyleng; return T_IF;}   
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "pmf0.l"
+#line 36 "pmf0.l"
 {printf("THEN\n");kolona+=yyleng;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "pmf0.l"
+#line 37 "pmf0.l"
 {kolona+=yyleng; return T_ELSE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "pmf0.l"
+#line 38 "pmf0.l"
 {kolona+=yyleng; return T_FOR;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "pmf0.l"
+#line 39 "pmf0.l"
 {kolona+=yyleng; return T_WHILE;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 34 "pmf0.l"
+#line 40 "pmf0.l"
 {printf("FI\n");kolona+=yyleng;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 35 "pmf0.l"
+#line 41 "pmf0.l"
 {kolona+=yyleng; return T_DO;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 36 "pmf0.l"
+#line 42 "pmf0.l"
 {kolona+=yyleng; return T_BREAK;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 37 "pmf0.l"
+#line 43 "pmf0.l"
 {printf("WRITE\n");kolona+=yyleng;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 38 "pmf0.l"
+#line 44 "pmf0.l"
 {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLT;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 39 "pmf0.l"
+#line 45 "pmf0.l"
 {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLF;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 40 "pmf0.l"
+#line 46 "pmf0.l"
 {printf("SKIP\n");kolona+=yyleng;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 41 "pmf0.l"
+#line 47 "pmf0.l"
 {printf("READ\n");kolona+=yyleng;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 42 "pmf0.l"
+#line 48 "pmf0.l"
 {printf("LET\n");kolona+=yyleng;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 43 "pmf0.l"
+#line 49 "pmf0.l"
 {printf(":=\n");kolona+=yyleng;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 44 "pmf0.l"
+#line 50 "pmf0.l"
 {printf("RETURN\n");kolona+=yyleng;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 45 "pmf0.l"
+#line 51 "pmf0.l"
 {printf("IN\n");kolona+=yyleng;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "pmf0.l"
+#line 52 "pmf0.l"
 {kolona+=yyleng; return T_END;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 48 "pmf0.l"
+#line 54 "pmf0.l"
 {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; kolona+=yyleng; return T_STR;}    //regularni izrazi
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 49 "pmf0.l"
+#line 55 "pmf0.l"
 {yylval.int_value=atoi(yytext);kolona+=yyleng; return T_INT;}    //int 
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 50 "pmf0.l"
+#line 56 "pmf0.l"
 {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 51 "pmf0.l"
+#line 57 "pmf0.l"
 {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 52 "pmf0.l"
+#line 58 "pmf0.l"
 {double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; kolona+=yyleng; return T_DBLEXP;} //double sa exp
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 53 "pmf0.l"
+#line 59 "pmf0.l"
 {yylval.ident=(char*)strdup(yytext); kolona+=yyleng; return T_ID;} //identifikator 
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 55 "pmf0.l"
+#line 61 "pmf0.l"
 {kolona+=yyleng; return T_MANJEJEDNAKO;} //operatori
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 56 "pmf0.l"
+#line 62 "pmf0.l"
 {kolona+=yyleng; return T_MANJE;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 57 "pmf0.l"
+#line 63 "pmf0.l"
 {kolona+=yyleng; return T_VISEJEDNAKO;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 58 "pmf0.l"
+#line 64 "pmf0.l"
 {kolona+=yyleng; return T_VISE;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 59 "pmf0.l"
+#line 65 "pmf0.l"
 {kolona+=yyleng; return T_JEJEDNAKO;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 60 "pmf0.l"
+#line 66 "pmf0.l"
 {kolona+=yyleng; return T_RAZLICITO;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 61 "pmf0.l"
+#line 67 "pmf0.l"
 {kolona+=yyleng; return T_AND;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 62 "pmf0.l"
+#line 68 "pmf0.l"
 {kolona+=yyleng; return T_OR;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 64 "pmf0.l"
+#line 70 "pmf0.l"
 {kolona+=yyleng; return T_PLUS;} //unarni operatori
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 65 "pmf0.l"
+#line 71 "pmf0.l"
 {kolona+=yyleng; return T_MINUS;} 
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 66 "pmf0.l"
+#line 72 "pmf0.l"
 {kolona+=yyleng; return T_MUL;} 
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 67 "pmf0.l"
+#line 73 "pmf0.l"
 {kolona+=yyleng; return T_DIV;} 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 68 "pmf0.l"
+#line 74 "pmf0.l"
 {kolona+=yyleng; return T_EQ;} 
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 70 "pmf0.l"
+#line 76 "pmf0.l"
 {kolona+=yyleng; return T_SC;}//znaci interpunkcije
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 71 "pmf0.l"
+#line 77 "pmf0.l"
 {kolona+=yyleng; return T_TACKA;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 72 "pmf0.l"
+#line 78 "pmf0.l"
 {kolona+=yyleng; return T_ZAREZ;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 73 "pmf0.l"
+#line 79 "pmf0.l"
 {kolona+=yyleng; return T_LEFTP;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 74 "pmf0.l"
+#line 80 "pmf0.l"
 {kolona+=yyleng; return T_RIGHTP;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 75 "pmf0.l"
+#line 81 "pmf0.l"
 {kolona+=yyleng; return T_NEGACIJA;}
 	YY_BREAK
 /*greske!*/
 case 52:
 YY_RULE_SETUP
-#line 79 "pmf0.l"
+#line 85 "pmf0.l"
 {
-    printf("Greska! Identifikator: %s prevazilazi duzinu od 30 karaktera na liniji: %d, koloni:%d\n", yytext, yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanIdentifikator(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 83 "pmf0.l"
+#line 89 "pmf0.l"
 {
-    printf("Greska! Invalidan heksadecimalni broj na liniji(ne sadrzi nista posle 0x/X): %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanHex1(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 87 "pmf0.l"
+#line 93 "pmf0.l"
 {
-    printf("Greska! Invalidan heksadecimalni broj na liniji: %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanHex2(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 91 "pmf0.l"
+#line 97 "pmf0.l"
 {
-    printf("Greska! Invalidan double broj bez vodece nule na liniji: %d, koloni: %d\n", yylineno, kolona); 
-    kolona+=yyleng;}
+    invalidanDouble1(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 95 "pmf0.l"
+#line 101 "pmf0.l"
 {
-    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
-    kolona+=yyleng;}
+    invalidanDExp1(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 99 "pmf0.l"
+#line 105 "pmf0.l"
 {
-    printf("Greska! Invalidan double broj sa exp na liniji: %d, koloni: %d\n", yylineno, kolona);
-    kolona+=yyleng;}
+    invalidanDExp2(yytext, yylineno, kolona-yyleng);
+}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 103 "pmf0.l"
+#line 109 "pmf0.l"
 { 
-    printf("Greska! Nezatvoren string: %s na liniji: %d, koloni: %d\n", yytext, yylineno, kolona); 
-    kolona+=yyleng; }
+    invalidanString(yytext, yylineno, kolona-yyleng);
+ }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 107 "pmf0.l"
+#line 113 "pmf0.l"
 {
-    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona); kolona+=yyleng;}
+    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng);}
 	YY_BREAK
 
 case 60:
 YY_RULE_SETUP
-#line 111 "pmf0.l"
+#line 117 "pmf0.l"
 {printf("Komentar u liniji!\n");
          kolona=1;
          BEGIN(INITIAL);}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 114 "pmf0.l"
+#line 120 "pmf0.l"
 {kolona++;}
 	YY_BREAK
 
 
 case 62:
 YY_RULE_SETUP
-#line 118 "pmf0.l"
+#line 124 "pmf0.l"
 {printf("Komentar u vise linija!\n"); kolona=1;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 119 "pmf0.l"
+#line 125 "pmf0.l"
 {BEGIN(INITIAL);}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 120 "pmf0.l"
+#line 126 "pmf0.l"
 {kolona++;}
 	YY_BREAK
 
 case 65:
 YY_RULE_SETUP
-#line 123 "pmf0.l"
+#line 129 "pmf0.l"
 ECHO;
 	YY_BREAK
-#line 1171 "lex.yy.c"
+#line 1177 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(KOMENTAR_ULINIJI):
 			case YY_STATE_EOF(KOMENTAR_VISELINIJA):
@@ -2053,5 +2059,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 123 "pmf0.l"
+#line 129 "pmf0.l"
 
