@@ -25,60 +25,59 @@ int kolona=1;//karakter u koloni
 \n          { kolona = 1; } //resetuje se jer smo presli u novi red, pa citamo ponovo od pocetka!
 
 "//"        {BEGIN(KOMENTAR_ULINIJI);}
-"/*"        {BEGIN(KOMENTAR_VISELINIJA);}
+"/*"        {printf("Komentar u vise linija!\n");BEGIN(KOMENTAR_VISELINIJA);}
 
-"STRING"        {printf("TYPE: STRING\n"); kolona+=yyleng;} //tipovi podataka
-"BOOLEAN"       {printf("TYPE: BOOLEAN\n");kolona+=yyleng;}
-"DOUBLE"        {printf("TYPE: DOUBLE\n");kolona+=yyleng;}
-"INT"           {printf("TYPE: INT\n");kolona+=yyleng;}
+"STRING"        {return T_STRID;} //identifikatori
+"BOOLEAN"       {return T_BOOLID;}
+"DOUBLE"        {return T_DOUBLEID;}
+"INT"           {return T_INTID;}
 
-"IF"        {kolona+=yyleng; return T_IF;}   
-"THEN"      {printf("THEN\n");kolona+=yyleng;}
-"ELSE"      {kolona+=yyleng; return T_ELSE;}
-"FOR"       {kolona+=yyleng; return T_FOR;}
-"WHILE"     {kolona+=yyleng; return T_WHILE;}
-"FI"        {printf("FI\n");kolona+=yyleng;}
-"DO"        {kolona+=yyleng; return T_DO;}
-"BREAK"     {kolona+=yyleng; return T_BREAK;}
-"WRITE"     {printf("WRITE\n");kolona+=yyleng;}
-"true"      {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLT;}
-"false"     {bool a; sscanf(yytext, "%d", &a); yylval.bool_value=a; kolona+=yyleng; return T_BOOLF;}
-"SKIP"      {printf("SKIP\n");kolona+=yyleng;}
-"READ"      {printf("READ\n");kolona+=yyleng;}
-"LET"       {printf("LET\n");kolona+=yyleng;}
-":="        {printf(":=\n");kolona+=yyleng;}
-"RETURN"    {printf("RETURN\n");kolona+=yyleng;}
-"IN"        {printf("IN\n");kolona+=yyleng;}
-"END"       {kolona+=yyleng; return T_END;}
+"IF"        {return T_IF;}   
+"THEN"      {return T_THEN;}
+"ELSE"      {return T_ELSE;}
+"FOR"       {return T_FOR;}
+"WHILE"     {return T_WHILE;}
+"FI"        {return T_FI;}
+"DO"        {return T_DO;}
+"BREAK"     {return T_BREAK;}
+"WRITE"     {return T_WRITE;}
+"TRUE"      {return T_BOOLT;}
+"FALSE"     {return T_BOOLF;}
+"SKIP"      {return T_SKIP;}
+"READ"      {return T_READ;}
+"LET"       {return T_LET;}
+"RETURN"    {return T_RETURN;}
+"IN"        {return T_IN;}
+"END"       {return T_END;}
 
-\"[^"\n]*\"     {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; kolona+=yyleng; return T_STR;}    //regularni izrazi
-0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);kolona+=yyleng; return T_INT;}    //int 
-(0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; kolona+=yyleng; return T_HEX;} //heksadekadni
-[0-9]+\.[0-9]* {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; kolona+=yyleng;return T_DOUBLE;} //double
-[0-9]+\.[0-9]*[eE][+-]?[0-9]+ {double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; kolona+=yyleng; return T_DBLEXP;} //double sa exp
-[a-zA-Z_][a-zA-Z0-9_]{0,29}  {yylval.ident=(char*)strdup(yytext); kolona+=yyleng; return T_ID;} //identifikator 
+\"[^"\n]*\"     {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; return T_STR;}    //regularni izrazi
+0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);return T_INT;}    //int 
+(0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; return T_HEX;} //heksadekadni
+[0-9]+\.[0-9]* {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; return T_DOUBLE;} //double
+[0-9]+\.[0-9]*[eE][+-]?[0-9]+ {double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; return T_DBLEXP;} //double sa exp
+[a-zA-Z_][a-zA-Z0-9_]{0,29}  {yylval.ident=(char*)strdup(yytext); return T_ID;} //identifikator 
 
-"<="        {kolona+=yyleng; return T_MANJEJEDNAKO;} //operatori
-"<"         {kolona+=yyleng; return T_MANJE;}
-">="        {kolona+=yyleng; return T_VISEJEDNAKO;}
-">"         {kolona+=yyleng; return T_VISE;}
-"=="        {kolona+=yyleng; return T_JEJEDNAKO;}
-"!="        {kolona+=yyleng; return T_RAZLICITO;}
-"&&"        {kolona+=yyleng; return T_AND;}
-"||"        {kolona+=yyleng; return T_OR;}
+"<="        {return T_MANJEJEDNAKO;} //operatori
+"<"         {return T_MANJE;}
+">="        {return T_VISEJEDNAKO;}
+">"         {return T_VISE;}
+"=="        {return T_JEJEDNAKO;}
+"!="        {return T_RAZLICITO;}
+"&&"        {return T_AND;}
+"||"        {return T_OR;}
 
-"+"     {kolona+=yyleng; return T_PLUS;} //unarni operatori
-"-"     {kolona+=yyleng; return T_MINUS;} 
-"*"     {kolona+=yyleng; return T_MUL;} 
-"/"     {kolona+=yyleng; return T_DIV;} 
-"="     {kolona+=yyleng; return T_EQ;} 
+"+"     {return T_PLUS;} //unarni operatori
+"-"     {return T_MINUS;} 
+"*"     {return T_MUL;} 
+"/"     {return T_DIV;} 
+"="     {return T_EQ;} 
 
-";"     {kolona+=yyleng; return T_SC;}//znaci interpunkcije
-"."     {kolona+=yyleng; return T_TACKA;}
-","     {kolona+=yyleng; return T_ZAREZ;}
-"("     {kolona+=yyleng; return T_LEFTP;}
-")"     {kolona+=yyleng; return T_RIGHTP;}
-"!"     {kolona+=yyleng; return T_NEGACIJA;}
+";"     {return T_SC;}//znaci interpunkcije
+"."     {return T_TACKA;}
+","     {return T_ZAREZ;}
+"("     {return T_LEFTP;}
+")"     {return T_RIGHTP;}
+"!"     {return T_NEGACIJA;}
 
     /*greske!*/
 
@@ -117,12 +116,15 @@ int kolona=1;//karakter u koloni
 "\n"    {printf("Komentar u liniji!\n");
          kolona=1;
          BEGIN(INITIAL);}
+"//"    {invalidanKomentar(yylineno, kolona-yyleng); return;}
 .       {kolona++;}
 }
 
 <KOMENTAR_VISELINIJA>{
-"\n"    {printf("Komentar u vise linija!\n"); kolona=1;}
+"\n"    {kolona=1;}
 "*/"    {BEGIN(INITIAL);}
+"/*"    {invalidanKomentar(yylineno, kolona-yyleng); return;}
+<<EOF>> {invalidanKomentar(yylineno, kolona-yyleng); return;}
 .       {kolona++;}
 }
 

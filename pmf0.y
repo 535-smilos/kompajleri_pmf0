@@ -89,6 +89,13 @@
 %token T_DO
 %token T_END
 %token T_EQ
+%token T_SKIP
+%token T_LET
+%token T_FI
+%token T_READ
+%token T_IN
+%token T_THEN
+%token T_WRITE
 
 %left T_PLUS T_MINUS
 %left T_MUL T_DIV T_MOD

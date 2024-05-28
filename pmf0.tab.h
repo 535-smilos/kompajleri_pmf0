@@ -80,7 +80,14 @@
      T_RETURN = 296,
      T_DO = 297,
      T_END = 298,
-     T_EQ = 299
+     T_EQ = 299,
+     T_SKIP = 300,
+     T_LET = 301,
+     T_FI = 302,
+     T_READ = 303,
+     T_IN = 304,
+     T_THEN = 305,
+     T_WRITE = 306
    };
 #endif
 
@@ -104,7 +111,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 108 "pmf0.tab.h"
+#line 115 "pmf0.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
