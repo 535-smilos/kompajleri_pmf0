@@ -60,69 +60,119 @@
     char* ident;
 }
 
-%start S
+%start program
 %token T_SC
-%token <int_value>T_INT
-%token <double_value>T_DOUBLE
-%token <double_exp>T_DBLEXP
-%token <hex_value>T_HEX
-%token <string_value>T_STR
-%token <bool_value>T_BOOLT T_BOOLF
-%token <ident> T_ID T_INTID T_BOOLID T_STRID T_DOUBLEID
+%token T_INT
+%token T_DOUBLE
+%token T_DBLEXP
+%token T_HEX
+%token T_STR
+%token T_BOOL
+%token T_ID INT_ID BOOL_ID STR_ID DOUBLE_ID HEX_ID
+%token T_DODJELA
 
 %token T_PLUS T_MINUS
 %token T_MUL T_DIV T_MOD
-%token T_DIV2
-%token T_MANJE T_VISE T_JEDNAKO T_MANJEJEDNAKO T_VISEJEDNAKO T_JEJEDNAKO T_RAZLICITO
-%token T_AND
-%token T_OR
-%token T_NEGACIJA
-%token T_ZAREZ
-%token T_TACKA
+%token T_MANJE T_VISE T_MANJEJEDNAKO T_VISEJEDNAKO T_JEJEDNAKO T_RAZLICITO
+%token T_AND T_OR T_NOT
+%token T_ZAREZ T_TACKA
 %token T_LEFTP T_RIGHTP
-%token T_FOR
-%token T_WHILE
-%token T_BREAK
-%token T_IF
-%token T_ELSE
-%token T_RETURN
-%token T_DO
-%token T_END
+%token T_FOR T_WHILE T_BREAK T_IF T_ELSE T_THEN T_RETURN T_FI T_DO T_END
 %token T_EQ
-%token T_SKIP
-%token T_LET
-%token T_FI
-%token T_READ
+%token T_SKIP T_LET 
+%token T_READ T_WRITE
 %token T_IN
-%token T_THEN
-%token T_WRITE
+
+%type <int_value>T_INT
+%type <double_value>T_DOUBLE
+%type <double_exp>T_DBLEXP
+%type <hex_value>T_HEX
+%type <bool_value>T_BOOL
+%type <string_value>T_STR
+%type <ident> T_ID INT_ID STR_ID BOOL_ID HEX_ID DOUBLE_ID
 
 %left T_PLUS T_MINUS
 %left T_MUL T_DIV T_MOD
-%nonassoc T_EQ T_RAZLICITO T_JEJEDNAKO
-%left T_MANJE T_MANJEJEDNAKO T_VISE T_VISEJEDNAKO
+%left T_LESS T_LEQ T_GREAT T_GEQ
 %left T_AND T_OR
-
-%type <int_value>exp
-%type <int_value>stat
-
-%type <double_value>exp2
-%type <double_value>stat2
-
-%type <double_exp>exp3
-%type <double_exp>stat3
-
-%type <hex_value>exp4
-%type <hex_value>stat4
-
-%type <bool_value>exp5
-%type <bool_value>stat5
-
-%type <string_value>exp6
-%type <string_value>stat6
+%nonassoc T_EQ T_NOTEQ T_ISEQ
 
 %%
 //odje ide gramatika!!!
+
+program:
+    T_LET declarations T_IN comm_seq T_END  {}
+;
+
+declarations:
+    decl_list   {}
+    | declarations decl_list    {}
+;
+
+decl_list:
+    type ident_decl T_TACKA     {}
+;
+
+ident_decl:
+    T_ID                        {printf("%s ", $1);}
+    | ident_decl T_ZAREZ T_ID   {printf("%s ", $3);}
+;
+
+comm_seq:
+    comm
+    | comm_seq comm  {}
+;
+
+comm:
+    T_SKIP T_SC     {}
+    | T_ID T_DODJELA exp T_SC   {printf("%s ", $1);}
+    | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC    {}
+    | T_IF exp T_THEN comm_seq T_FI T_SC    {}
+    | T_IF exp T_DO comm_seq T_END T_SC     {}
+    | T_WHILE exp T_DO comm_seq T_END T_SC  {}
+    | T_READ T_ID T_SC  {}
+    | T_WRITE exp T_SC  {}
+;
+
+exp:
+    constant    {}
+    | T_ID      {printf("%s ", $1);}
+    | T_LEFTP exp T_RIGHTP  {}
+    | exp T_PLUS exp    {}
+    | exp T_MINUS exp   {}
+    | exp T_MUL exp     {}
+    | exp T_DIV exp     {}
+    | exp T_MOD exp     {}
+    | exp T_ISEQ exp {}
+    | exp T_NOTEQ exp   {}
+    | exp T_LESS exp    {}
+    | exp T_LEQ exp    {}
+    | exp T_GREAT exp   {}
+    | exp T_GEQ exp     {}
+    | exp T_AND exp     {}
+    | exp T_OR exp     {}
+    | T_NOT exp         {}
+;
+
+constant:
+    T_INT   {printf("%d\n", $1);}
+    | T_DOUBLE {printf("%lf\n", $1);}
+    | T_DBLEXP {printf("%lf\n", $1);}
+    | T_HEX {printf("%x\n", $1);}
+    | T_STR {printf("%s\n", $1);}
+    | T_BOOL {printf("%s\n", $1);}
+;
+
+type:
+    INT_ID  {printf("int ");}
+    | STR_ID    {printf("string ");}
+    | DOUBLE_ID     {printf("double ");}
+    | HEX_ID    {printf("hex ");}
+    | BOOL_ID   {printf("bool ");}
+;
+
+/*
+//stara gramatika
 S: S stat { }
     | S stat2 { }
     | S stat3 { }
@@ -133,7 +183,7 @@ S: S stat { }
 ;
 
 stat: exp T_SC {printf("%d\n", $1);}
-    | T_ID T_EQ exp T_SC {/*printf("%s=%d\n", $1, $3);*/
+    | T_ID T_EQ exp T_SC {printf("%s=%d\n", $1, $3);
                             struct Promjenljiva* prom=findVariable($1);
                             setVariableValue(prom, $1, $3);
                          }
@@ -230,6 +280,7 @@ exp6:
     T_STR { $$=strdup($1); }
 ;
 
+*/
 %%
 
 void yyerror(const char* s){
