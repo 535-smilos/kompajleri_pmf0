@@ -128,6 +128,7 @@ comm:
     | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC    {}
     | T_IF exp T_THEN comm_seq T_FI T_SC    {}
     | T_IF exp T_DO comm_seq T_END T_SC     {}
+    | T_FOR T_LEFTP T_ID T_DODJELA exp T_SC exp T_SC T_ID T_DODJELA exp T_RIGHTP T_DO comm_seq T_END T_SC   {}
     | T_WHILE exp T_DO comm_seq T_END T_SC  {}
     | T_READ T_ID T_SC  {}
     | T_WRITE exp T_SC  {}
