@@ -84,34 +84,41 @@ int kolona=1;//karakter u koloni
 
 [a-zA-Z_][a-zA-Z0-9_]{0,29}[a-zA-Z0-9_]     {
     invalidanIdentifikator(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 (0x|0X)[^a-fA-F0-9]   {
     invalidanHex1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 (0x|0X)[1-9A-Za-z][0-9A-Za-z]*      {
     invalidanHex2(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 \.[0-9]+                      {
     invalidanDouble1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 [0-9]+(\.[0-9]+)?[eE][+-]?[0-9]+    {
     invalidanDExp1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 [0-9]+\.[0-9]*[eE][+-]? {
     invalidanDExp2(yytext, yylineno, kolona-yyleng);
+    return;
 }
 
 \"[^"\n]* { 
     invalidanString(yytext, yylineno, kolona-yyleng);
+    return;
  }
 
 .       {
-    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng);}
+    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng); return;}
 
 <KOMENTAR_ULINIJI>{
 "\n"    {printf("Komentar u liniji!\n");

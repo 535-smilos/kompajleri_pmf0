@@ -73,7 +73,7 @@
 
 %token T_PLUS T_MINUS
 %token T_MUL T_DIV T_MOD
-%token T_MANJE T_VISE T_MANJEJEDNAKO T_VISEJEDNAKO T_JEJEDNAKO T_RAZLICITO
+%token T_LESS T_GREAT T_LEQ T_GEQ T_ISEQ T_NOTEQ
 %token T_AND T_OR T_NOT
 %token T_ZAREZ T_TACKA
 %token T_LEFTP T_RIGHTP
@@ -91,11 +91,10 @@
 %type <string_value>T_STR
 %type <ident> T_ID INT_ID STR_ID BOOL_ID HEX_ID DOUBLE_ID
 
+%left T_AND T_OR T_NOT
 %left T_PLUS T_MINUS
 %left T_MUL T_DIV T_MOD
-%left T_LESS T_LEQ T_GREAT T_GEQ
-%left T_AND T_OR
-%nonassoc T_EQ T_NOTEQ T_ISEQ
+%nonassoc T_EQ T_NOTEQ T_ISEQ T_LESS T_LEQ T_GREAT T_GEQ
 
 %%
 //odje ide gramatika!!!

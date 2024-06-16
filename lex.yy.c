@@ -1096,107 +1096,114 @@ YY_RULE_SETUP
 #line 85 "pmf0.l"
 {
     invalidanIdentifikator(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 89 "pmf0.l"
+#line 90 "pmf0.l"
 {
     invalidanHex1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 93 "pmf0.l"
+#line 95 "pmf0.l"
 {
     invalidanHex2(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 97 "pmf0.l"
+#line 100 "pmf0.l"
 {
     invalidanDouble1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 101 "pmf0.l"
+#line 105 "pmf0.l"
 {
     invalidanDExp1(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 105 "pmf0.l"
+#line 110 "pmf0.l"
 {
     invalidanDExp2(yytext, yylineno, kolona-yyleng);
+    return;
 }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 109 "pmf0.l"
+#line 115 "pmf0.l"
 { 
     invalidanString(yytext, yylineno, kolona-yyleng);
+    return;
  }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 113 "pmf0.l"
+#line 120 "pmf0.l"
 {
-    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng);}
+    printf("Greska! Invalidan karakter %c na liniji: %d, koloni: %d\n", yytext[0], yylineno, kolona-yyleng); return;}
 	YY_BREAK
 
 case 60:
 YY_RULE_SETUP
-#line 117 "pmf0.l"
+#line 124 "pmf0.l"
 {printf("Komentar u liniji!\n");
          kolona=1;
          BEGIN(INITIAL);}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 120 "pmf0.l"
+#line 127 "pmf0.l"
 {invalidanKomentar(yylineno, kolona-yyleng); return;}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 121 "pmf0.l"
+#line 128 "pmf0.l"
 {kolona++;}
 	YY_BREAK
 
 
 case 63:
 YY_RULE_SETUP
-#line 125 "pmf0.l"
+#line 132 "pmf0.l"
 {kolona=1;}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 126 "pmf0.l"
+#line 133 "pmf0.l"
 {BEGIN(INITIAL);}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 127 "pmf0.l"
+#line 134 "pmf0.l"
 {invalidanKomentar(yylineno, kolona-yyleng); return;}
 	YY_BREAK
 case YY_STATE_EOF(KOMENTAR_VISELINIJA):
-#line 128 "pmf0.l"
+#line 135 "pmf0.l"
 {invalidanKomentar(yylineno, kolona-yyleng); return;}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 129 "pmf0.l"
+#line 136 "pmf0.l"
 {kolona++;}
 	YY_BREAK
 
 case 67:
 YY_RULE_SETUP
-#line 132 "pmf0.l"
+#line 139 "pmf0.l"
 ECHO;
 	YY_BREAK
-#line 1200 "lex.yy.c"
+#line 1207 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(KOMENTAR_ULINIJI):
 				yyterminate();
@@ -2081,5 +2088,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 132 "pmf0.l"
+#line 139 "pmf0.l"
 

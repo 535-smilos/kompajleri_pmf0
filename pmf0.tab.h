@@ -58,12 +58,12 @@
      T_MUL = 274,
      T_DIV = 275,
      T_MOD = 276,
-     T_MANJE = 277,
-     T_VISE = 278,
-     T_MANJEJEDNAKO = 279,
-     T_VISEJEDNAKO = 280,
-     T_JEJEDNAKO = 281,
-     T_RAZLICITO = 282,
+     T_LESS = 277,
+     T_GREAT = 278,
+     T_LEQ = 279,
+     T_GEQ = 280,
+     T_ISEQ = 281,
+     T_NOTEQ = 282,
      T_AND = 283,
      T_OR = 284,
      T_NOT = 285,
@@ -86,13 +86,7 @@
      T_LET = 302,
      T_READ = 303,
      T_WRITE = 304,
-     T_IN = 305,
-     T_GEQ = 306,
-     T_GREAT = 307,
-     T_LEQ = 308,
-     T_LESS = 309,
-     T_ISEQ = 310,
-     T_NOTEQ = 311
+     T_IN = 305
    };
 #endif
 
@@ -116,7 +110,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 120 "pmf0.tab.h"
+#line 114 "pmf0.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
