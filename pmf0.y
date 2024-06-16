@@ -3,12 +3,15 @@
     #include <stdlib.h>
     #include <stdbool.h>
     #include <string.h>
+    #include "BCF.h"
 
     struct Promjenljiva{
         char* id;
         int val;
         struct Promjenljiva* next;
     };
+
+    BCF_Node* root=NULL;
 
     void yyerror(const char* s);
 
@@ -58,6 +61,7 @@
     int hex_value;
     bool bool_value;
     char* ident;
+    BCF_Node* node;
 }
 
 %start program
@@ -90,6 +94,8 @@
 %type <bool_value>T_BOOL
 %type <string_value>T_STR
 %type <ident> T_ID INT_ID STR_ID BOOL_ID HEX_ID DOUBLE_ID
+%type <node> program declarations decl_list ident_decl comm_seq comm exp constant type
+
 
 %left T_AND T_OR T_NOT
 %left T_PLUS T_MINUS
@@ -100,187 +106,81 @@
 //odje ide gramatika!!!
 
 program:
-    T_LET declarations T_IN comm_seq T_END  {}
+    T_LET declarations T_IN comm_seq T_END  {
+        $$=create_node("program", 2, $2, $4);
+    }
 ;
 
 declarations:
-    decl_list   {}
-    | declarations decl_list    {}
+    decl_list   {$$=create_node("declarations", 1, $1);}
+    | declarations decl_list    {$$=create_node("declarations", 2, $1, $2);}
 ;
 
 decl_list:
-    type ident_decl T_TACKA     {}
+    type ident_decl T_TACKA     {$$=create_node("decl_list", 2, $1, $2);}
 ;
 
 ident_decl:
-    T_ID                        {printf("%s ", $1);}
-    | ident_decl T_ZAREZ T_ID   {printf("%s ", $3);}
+    T_ID                        {$$=create_node("ident_decl", 0);}
+    | ident_decl T_ZAREZ T_ID   {$$=create_node("ident_decl", 1, $1);}
 ;
 
 comm_seq:
-    comm
-    | comm_seq comm  {}
+    comm            {$$=create_node("comm_seq", 1, $1);}
+    | comm_seq comm  {
+        $$=create_node("comm_seq", 2, $1, $2);
+    }
 ;
 
 comm:
-    T_SKIP T_SC     {}
-    | T_ID T_DODJELA exp T_SC   {printf("%s ", $1);}
-    | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC    {}
-    | T_IF exp T_THEN comm_seq T_FI T_SC    {}
-    | T_IF exp T_DO comm_seq T_END T_SC     {}
-    | T_FOR T_LEFTP T_ID T_DODJELA exp T_SC exp T_SC T_ID T_DODJELA exp T_RIGHTP T_DO comm_seq T_END T_SC   {}
-    | T_WHILE exp T_DO comm_seq T_END T_SC  {}
-    | T_READ T_ID T_SC  {}
-    | T_WRITE exp T_SC  {}
+     T_SKIP T_SC  { $$ = create_node("comm", 0); }
+    | T_ID T_DODJELA exp T_SC  { $$ = create_node("comm", 1, $3); }
+    | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC  { $$ = create_node("comm", 2, $2, $4); }
+    | T_IF exp T_THEN comm_seq T_FI T_SC  { $$ = create_node("comm", 1, $2); }
+    | T_IF exp T_DO comm_seq T_END T_SC  { $$ = create_node("comm", 2, $2, $4); }
+    | T_FOR T_LEFTP T_ID T_DODJELA exp T_SC exp T_SC T_ID T_DODJELA exp T_RIGHTP T_DO comm_seq T_END T_SC  { $$ = create_node("comm", 3, $5, $7, $12); }
+    | T_WHILE exp T_DO comm_seq T_END T_SC  { $$ = create_node("comm", 2, $2, $4); }
+    | T_READ T_ID T_SC  { $$ = create_node("comm", 0); }
+    | T_WRITE exp T_SC  { $$ = create_node("comm", 1, $2); }
 ;
 
 exp:
-    constant    {}
-    | T_ID      {printf("%s ", $1);}
-    | T_LEFTP exp T_RIGHTP  {}
-    | exp T_PLUS exp    {}
-    | exp T_MINUS exp   {}
-    | exp T_MUL exp     {}
-    | exp T_DIV exp     {}
-    | exp T_MOD exp     {}
-    | exp T_ISEQ exp {}
-    | exp T_NOTEQ exp   {}
-    | exp T_LESS exp    {}
-    | exp T_LEQ exp    {}
-    | exp T_GREAT exp   {}
-    | exp T_GEQ exp     {}
-    | exp T_AND exp     {}
-    | exp T_OR exp     {}
-    | T_NOT exp         {}
+    constant  { $$ = create_node("exp", 1, $1); }
+    | T_ID  { $$ = create_node("exp", 0); }
+    | T_LEFTP exp T_RIGHTP  { $$ = create_node("exp", 1, $2); }
+    | exp T_PLUS exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_MINUS exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_MUL exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_DIV exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_MOD exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_ISEQ exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_NOTEQ exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_LESS exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_LEQ exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_GREAT exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_GEQ exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_AND exp  { $$ = create_node("exp", 2, $1, $3); }
+    | exp T_OR exp  { $$ = create_node("exp", 2, $1, $3); }
+    | T_NOT exp  { $$ = create_node("exp", 1, $2); }
 ;
 
 constant:
-    T_INT   {printf("%d\n", $1);}
-    | T_DOUBLE {printf("%lf\n", $1);}
-    | T_DBLEXP {printf("%lf\n", $1);}
-    | T_HEX {printf("%x\n", $1);}
-    | T_STR {printf("%s\n", $1);}
-    | T_BOOL {printf("%s\n", $1);}
+     T_INT  { $$ = create_node("constant", 0); }
+    | T_DOUBLE  { $$ = create_node("constant", 0); }
+    | T_DBLEXP  { $$ = create_node("constant", 0); }
+    | T_HEX  { $$ = create_node("constant", 0); }
+    | T_STR  { $$ = create_node("constant", 0); }
+    | T_BOOL  { $$ = create_node("constant", 0); }
 ;
 
 type:
-    INT_ID  {printf("int ");}
-    | STR_ID    {printf("string ");}
-    | DOUBLE_ID     {printf("double ");}
-    | HEX_ID    {printf("hex ");}
-    | BOOL_ID   {printf("bool ");}
+    INT_ID  { $$ = create_node("type", 0); }
+    | STR_ID  { $$ = create_node("type", 0); }
+    | DOUBLE_ID  { $$ = create_node("type", 0); }
+    | HEX_ID  { $$ = create_node("type", 0); }
+    | BOOL_ID  { $$ = create_node("type", 0); }
 ;
 
-/*
-//stara gramatika
-S: S stat { }
-    | S stat2 { }
-    | S stat3 { }
-    | S stat4 { }
-    | S stat5 { }
-    | S stat6 { }
-    |
-;
-
-stat: exp T_SC {printf("%d\n", $1);}
-    | T_ID T_EQ exp T_SC {printf("%s=%d\n", $1, $3);
-                            struct Promjenljiva* prom=findVariable($1);
-                            setVariableValue(prom, $1, $3);
-                         }
-;
-
-stat2: exp2 T_SC {printf("%f\n", $1);}
-     | T_ID T_EQ exp2 T_SC {printf("%s=%f\n", $1, $3);} 
-;
-
-stat3: exp3 T_SC {printf("%e\n", $1);}
-     | T_ID T_EQ exp3 T_SC {printf("%s=%e\n", $1, $3);}
-;
-
-stat4: exp4 T_SC {printf("%x\n", $1);}
-     | T_ID T_EQ exp4 T_SC {printf("%s=%x\n", $1, $3);}
-;
-
-stat5: exp5 T_SC {printf("%d\n", $1);}
-     | T_ID T_EQ exp5 T_SC {printf("%s=%d\n", $1, $3);}
-;
-
-stat6: exp6 T_SC {printf("%s\n", $1);}
-     | T_ID T_EQ exp6 T_SC {printf("%s=%s\n", $1, $3);}
-;
-
-exp:
-    exp T_PLUS exp              { $$=$1+$3; }
-    | exp T_MINUS exp           { $$=$1-$3; }
-    | exp T_MUL exp             { $$=$1*$3; }
-    | exp T_DIV exp             { $$=$1/$3; }
-    | exp T_MOD exp             { $$=$1%$3; }
-    | exp T_JEJEDNAKO exp       { $$=$1==$3; }
-    | exp T_MANJE exp           { $$=$1<$3; }
-    | exp T_VISE exp            { $$=$1>$3; }
-    | exp T_MANJEJEDNAKO exp    { $$=$1<=$3; }
-    | exp T_VISEJEDNAKO exp     { $$=$1>=$3; }
-    | exp T_RAZLICITO exp       { $$=$1!=$3; }
-    | T_LEFTP exp T_RIGHTP      { $$=$2;}
-    | T_INT                     { $$=$1;}
-    | T_ID                   { $$=getVariableValue($1); }
-;
-
-exp2:
-    exp2 T_PLUS exp2              { $$=$1+$3; }
-    | exp2 T_MINUS exp2           { $$=$1-$3; }
-    | exp2 T_MUL exp2             { $$=$1*$3; }
-    | exp2 T_DIV exp2             { $$=$1/$3; }
-    | exp2 T_JEJEDNAKO exp2       { $$=$1==$3; }
-    | exp2 T_MANJE exp2           { $$=$1<$3; }
-    | exp2 T_VISE exp2            { $$=$1>$3; }
-    | exp2 T_MANJEJEDNAKO exp2    { $$=$1<=$3; }
-    | exp2 T_VISEJEDNAKO exp2     { $$=$1>=$3; }
-    | exp2 T_RAZLICITO exp2       { $$=$1!=$3; }
-    | T_LEFTP exp2 T_RIGHTP       { $$=$2;}
-    | T_DOUBLE                    { $$=$1;}
-;
-
-exp3:
-    exp3 T_PLUS exp3              { $$=$1+$3; }
-    | exp3 T_MINUS exp3           { $$=$1-$3; }
-    | exp3 T_MUL exp3             { $$=$1*$3; }
-    | exp3 T_DIV exp3             { $$=$1/$3; }
-    | exp3 T_JEJEDNAKO exp3       { $$=$1==$3; }
-    | exp3 T_MANJE exp3           { $$=$1<$3; }
-    | exp3 T_VISE exp3            { $$=$1>$3; }
-    | exp3 T_MANJEJEDNAKO exp3    { $$=$1<=$3; }
-    | exp3 T_VISEJEDNAKO exp3     { $$=$1>=$3; }
-    | exp3 T_RAZLICITO exp3       { $$=$1!=$3; }
-    | T_LEFTP exp3 T_RIGHTP       { $$=$2;}
-    | T_DBLEXP                    { $$=$1;}
-;
-
-exp4:
-    exp4 T_PLUS exp4              { $$=$1+$3; }
-    | exp4 T_MINUS exp4           { $$=$1-$3; }
-    | exp4 T_MUL exp4             { $$=$1*$3; }
-    | exp4 T_DIV exp4             { $$=$1/$3; }
-    | exp4 T_JEJEDNAKO exp4       { $$=$1==$3; }
-    | exp4 T_MANJE exp4           { $$=$1<$3; }
-    | exp4 T_VISE exp4            { $$=$1>$3; }
-    | exp4 T_MANJEJEDNAKO exp4    { $$=$1<=$3; }
-    | exp4 T_VISEJEDNAKO exp4     { $$=$1>=$3; }
-    | exp4 T_RAZLICITO exp4       { $$=$1!=$3; }
-    | T_LEFTP exp4 T_RIGHTP       { $$=$2;}
-    | T_HEX                       { $$=$1;}
-;
-
-exp5:
-    T_BOOLT     { $$=$1; }
-    | T_BOOLF   { $$=$1; }
-;
-
-exp6:
-    T_STR { $$=strdup($1); }
-;
-
-*/
 %%
 
 void yyerror(const char* s){
@@ -289,7 +189,8 @@ void yyerror(const char* s){
 
 int main(){
     int res=yyparse();
-
+    print_tree(root, 0);
+    free_tree(root);
     if(res==0){
         printf("Ulaz ispravan\n");
     } else printf("NEispravan\n");

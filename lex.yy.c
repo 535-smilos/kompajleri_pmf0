@@ -883,77 +883,77 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 36 "pmf0.l"
-{printf(yytext); return T_IF;}//kljucne rijeci
+{return T_IF;}//kljucne rijeci
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 37 "pmf0.l"
-{printf(yytext); return T_THEN;}
+{return T_THEN;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 38 "pmf0.l"
-{printf(yytext); return T_ELSE;}
+{return T_ELSE;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 39 "pmf0.l"
-{printf(yytext); return T_FOR;}
+{return T_FOR;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 40 "pmf0.l"
-{printf(yytext); return T_WHILE;}
+{return T_WHILE;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 41 "pmf0.l"
-{printf(yytext); return T_FI;}
+{return T_FI;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 42 "pmf0.l"
-{printf(yytext); return T_DO;}
+{return T_DO;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 43 "pmf0.l"
-{printf(yytext); return T_BREAK;}
+{return T_BREAK;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 44 "pmf0.l"
-{printf(yytext); return T_WRITE;}
+{return T_WRITE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 45 "pmf0.l"
-{printf(yytext); return T_SKIP;}
+{return T_SKIP;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 46 "pmf0.l"
-{printf(yytext); return T_READ;}
+{return T_READ;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 47 "pmf0.l"
-{printf(yytext); return T_LET;}
+{return T_LET;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 48 "pmf0.l"
-{printf(yytext); return T_RETURN;}
+{return T_RETURN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 49 "pmf0.l"
-{printf(yytext); return T_IN;}
+{return T_IN;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 50 "pmf0.l"
-{printf(yytext); return T_END;}
+{return T_END;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
