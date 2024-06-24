@@ -4,7 +4,6 @@
     #include <stdlib.h>
     #include <stdbool.h>
     #include <string.h>
-    #include "BCF.h"
 
     void yyerror(const char* s);  // Prototip funkcije za prijavu grešaka od strane Bison-a
 %}
@@ -127,10 +126,8 @@ void yyerror(const char* s){
 }
 
 int main(){
-    extern BCF_Node* root=NULL; 
     int res=yyparse();
-    print_tree(root, 0);
-    free_tree(root);
+
     if(res==0){
         printf("Ulaz ispravan\n");
     } else printf("NEispravan\n");
