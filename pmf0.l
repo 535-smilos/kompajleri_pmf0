@@ -1,5 +1,6 @@
 %{
 int kolona=1;//karakter u koloni
+#include "BCF.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +22,7 @@ int kolona=1;//karakter u koloni
 
 %% 
 
-[ \t]+       { kolona += yyleng; } //ucitavanje praznine sabira pomjeraj duzine broja praznina
+[ \t\r]+       { kolona += yyleng; } //ucitavanje praznine sabira pomjeraj duzine broja praznina
 \n          { kolona = 1; } //resetuje se jer smo presli u novi red, pa citamo ponovo od pocetka!
 
 "//"        {BEGIN(KOMENTAR_ULINIJI);}
@@ -33,21 +34,22 @@ int kolona=1;//karakter u koloni
 "INT"           {return INT_ID;}
 "HEX"           {return HEX_ID;}
 
-"IF"        {printf(yytext); return T_IF;}//kljucne rijeci
-"THEN"      {printf(yytext); return T_THEN;}
-"ELSE"      {printf(yytext); return T_ELSE;}
-"FOR"       {printf(yytext); return T_FOR;}
-"WHILE"     {printf(yytext); return T_WHILE;}
-"FI"        {printf(yytext); return T_FI;}
-"DO"        {printf(yytext); return T_DO;}
-"BREAK"     {printf(yytext); return T_BREAK;}
-"WRITE"     {printf(yytext); return T_WRITE;}
-"SKIP"      {printf(yytext); return T_SKIP;}
-"READ"      {printf(yytext); return T_READ;}
-"LET"       {printf(yytext); return T_LET;}
-"RETURN"    {printf(yytext); return T_RETURN;}
-"IN"        {printf(yytext); return T_IN;}
-"END"       {printf(yytext); return T_END;}
+"IF"        {return T_IF;}//kljucne rijeci
+"THEN"      {return T_THEN;}
+"ELSE"      {return T_ELSE;}
+"FOR"       {return T_FOR;}
+"WHILE"     {return T_WHILE;}
+"FI"        {return T_FI;}
+"BREAK"     {return T_BREAK;}
+"DO"        {return T_DO;}
+"TO"        {return T_TO;}
+"WRITE"     {return T_WRITE;}
+"SKIP"      {return T_SKIP;}
+"READ"      {return T_READ;}
+"LET"       {return T_LET;}
+"RETURN"    {return T_RETURN;}
+"IN"        {return T_IN;}
+"END"       {return T_END;}
 
 \"[^"\n]*\"     {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; return T_STR;}    //regularni izrazi
 -?0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);return T_INT;}    //int 

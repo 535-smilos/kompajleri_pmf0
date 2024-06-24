@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "greske.h"
+#include "BCF.h"
 
 int errNo=0;
 

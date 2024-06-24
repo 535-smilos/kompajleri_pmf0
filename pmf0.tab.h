@@ -44,14 +44,14 @@
      T_DOUBLE = 260,
      T_DBLEXP = 261,
      T_HEX = 262,
-     T_STR = 263,
-     T_BOOL = 264,
+     T_BOOL = 263,
+     T_STR = 264,
      T_ID = 265,
      INT_ID = 266,
-     BOOL_ID = 267,
-     STR_ID = 268,
-     DOUBLE_ID = 269,
-     HEX_ID = 270,
+     STR_ID = 267,
+     BOOL_ID = 268,
+     HEX_ID = 269,
+     DOUBLE_ID = 270,
      T_DODJELA = 271,
      T_PLUS = 272,
      T_MINUS = 273,
@@ -86,7 +86,8 @@
      T_LET = 302,
      T_READ = 303,
      T_WRITE = 304,
-     T_IN = 305
+     T_IN = 305,
+     T_TO = 306
    };
 #endif
 
@@ -97,7 +98,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 53 "pmf0.y"
+#line 11 "pmf0.y"
 
     int int_value;
     char* string_value;
@@ -106,11 +107,12 @@ typedef union YYSTYPE
     int hex_value;
     bool bool_value;
     char* ident;
+    BCF *cvor;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 114 "pmf0.tab.h"
+#line 116 "pmf0.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
