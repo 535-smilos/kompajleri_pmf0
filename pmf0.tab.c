@@ -1586,7 +1586,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 79 "pmf0.y"
-    { BCF* cvor = napravi_dodelu(napravi_identifikator((yyvsp[(2) - (10)].ident)), (yyvsp[(4) - (10)].cvor)); (yyval.cvor) = napravi_for(cvor, (yyvsp[(6) - (10)].cvor), (yyvsp[(8) - (10)].cvor)); ;}
+    { BCF* for_cvor = napravi_dodelu(napravi_identifikator((yyvsp[(2) - (10)].ident)), (yyvsp[(4) - (10)].cvor)); (yyval.cvor) = napravi_for(for_cvor, (yyvsp[(6) - (10)].cvor), (yyvsp[(8) - (10)].cvor)); ;}
     break;
 
   case 15:

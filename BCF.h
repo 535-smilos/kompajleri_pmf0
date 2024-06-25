@@ -13,8 +13,8 @@ struct BCF {
     enum {
         C_PROGRAM, C_LET, C_IN, C_END, C_SKIP, C_IF, C_WHILE, C_FOR, C_OR, C_NOT,
         C_DODJELA, C_READ, C_WRITE, C_SEK, C_MOD, C_LEQ, C_LESS, C_GEQ, C_GREAT, 
-        C_ISEQ, C_NOTEQ, C_AND, C_IDENT, C_PLUS, C_MINUS, C_MUL, C_DIV, C_INTID, 
-        C_DBLID, C_BOOLID, C_STRID  
+        C_ISEQ, C_NOTEQ, C_AND, C_IDENT, C_PLUS, C_MINUS, C_MUL, C_DIV, C_INT, 
+        C_DBL, C_BOOL, C_STR
     } tip;
     union {
         int int_value;

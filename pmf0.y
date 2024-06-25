@@ -76,7 +76,7 @@ comm:
     | T_ID T_DODJELA exp T_SC  { $$ = napravi_dodelu(napravi_identifikator($1), $3); }
     | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC  { $$ = napravi_if($2, $4, $6); }
     | T_IF exp T_THEN comm_seq T_FI T_SC %prec T_ELSE  { $$ = napravi_if($2, $4, NULL); }
-    | T_FOR T_ID T_DODJELA exp T_TO exp T_DO comm_seq T_END T_SC  { BCF* cvor = napravi_dodelu(napravi_identifikator($2), $4); $$ = napravi_for(cvor, $6, $8); }
+    | T_FOR T_ID T_DODJELA exp T_TO exp T_DO comm_seq T_END T_SC  { BCF* for_cvor = napravi_dodelu(napravi_identifikator($2), $4); $$ = napravi_for(for_cvor, $6, $8); }
     | T_WHILE exp T_DO comm_seq T_END T_SC  { $$ = napravi_while($2, $4); }
     | T_READ T_ID T_SC  { $$ = napravi_read(napravi_identifikator($2)); }
     | T_WRITE exp T_SC  { $$ = napravi_write($2); }

@@ -1,12 +1,10 @@
 #include "BCF.h"
 
-// Pomoćne funkcije za kreiranje čvorova
-
 BCF* napravi_program(BCF* deklaracije, BCF* komande) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_PROGRAM;
-    cvor->c_program.decl = napravi_let(deklaracije);
-    cvor->c_program.comm = napravi_in(komande);
+    cvor->c_sek.cvorovi[0] = napravi_let(deklaracije);
+    cvor->c_sek.cvorovi[1] = napravi_in(komande);
     return cvor;
 }
 
@@ -40,28 +38,28 @@ BCF* napravi_sekvencu(BCF* prvi, BCF* drugi) {
 
 BCF* napravi_int_konst(int vrednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
-    cvor->tip = C_INTID;
+    cvor->tip = C_INT;
     cvor->int_value = vrednost;
     return cvor;
 }
 
 BCF* napravi_double_konst(double vrednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
-    cvor->tip = C_DBLID;
+    cvor->tip = C_DBL;
     cvor->double_value = vrednost;
     return cvor;
 }
 
 BCF* napravi_string_konst(char* vrednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
-    cvor->tip = C_STRID;
+    cvor->tip = C_STR;
     cvor->string_value = strdup(vrednost);
     return cvor;
 }
 
 BCF* napravi_bool_konst(bool vrednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
-    cvor->tip = C_BOOLID;
+    cvor->tip = C_BOOL;
     cvor->bool_value = vrednost;
     return cvor;
 }
@@ -73,10 +71,10 @@ BCF* napravi_identifikator(char* ime) {
     return cvor;
 }
 
-BCF* napravi_binarni_operator(int tip, BCF* levi, BCF* desni) {
+BCF* napravi_binarni_operator(int tip, BCF* lijevi, BCF* desni) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = tip;
-    cvor->c_binarna_op.lijevi = levi;
+    cvor->c_binarna_op.lijevi = lijevi;
     cvor->c_binarna_op.desni = desni;
     return cvor;
 }
@@ -88,36 +86,36 @@ BCF* napravi_unarni_operator(int tip, BCF* cvor) {
     return novi_cvor;
 }
 
-BCF* napravi_if(BCF* uslov, BCF* onda_grana, BCF* inace_grana) {
+BCF* napravi_if(BCF* uslov, BCF* then_grana, BCF* else_grana) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_IF;
     cvor->c_if.cond = uslov;
-    cvor->c_if.branch_t = onda_grana;
-    cvor->c_if.branch_e = inace_grana;
+    cvor->c_if.branch_t = then_grana;
+    cvor->c_if.branch_e = else_grana;
     return cvor;
 }
 
-BCF* napravi_while(BCF* uslov, BCF* telo) {
+BCF* napravi_while(BCF* uslov, BCF* body) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_WHILE;
     cvor->c_while.cond = uslov;
-    cvor->c_while.body = telo;
+    cvor->c_while.body = body;
     return cvor;
 }
 
-BCF* napravi_for(BCF* init, BCF* uslov, BCF* telo) {
+BCF* napravi_for(BCF* init, BCF* uslov, BCF* body) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_FOR;
     cvor->c_for.init = init;
     cvor->c_for.cond = uslov;
-    cvor->c_for.for_body = telo;
+    cvor->c_for.for_body = body;
     return cvor;
 }
 
-BCF* napravi_dodelu(BCF* levi, BCF* desni) {
+BCF* napravi_dodelu(BCF* lijevi, BCF* desni) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_DODJELA;
-    cvor->c_binarna_op.lijevi = levi;
+    cvor->c_binarna_op.lijevi = lijevi;
     cvor->c_binarna_op.desni = desni;
     return cvor;
 }
@@ -160,20 +158,19 @@ const char* dohvati_ime_operatora(int tip) {
         case C_OR: return "||";
         case C_NOT: return "!";
         case C_DODJELA: return ":=";
-        default: return "nepoznat_op";
+        default: return "nepoznat_operator";
     }
 }
 
 void rekurzivna_stampa(BCF* korijen, int dubina, int nivo) {
     if (!korijen) return;
 
-    for (int i = 0; i < nivo; ++i) printf("  ");
-
     switch (korijen->tip) {
         case C_PROGRAM:
             printf("%d. nivo: PROGRAM\n", nivo);
             rekurzivna_stampa(korijen->c_program.decl, dubina + 1, nivo + 1);
             rekurzivna_stampa(korijen->c_program.comm, dubina + 1, nivo + 1);
+            printf("%d. nivo: END\n", nivo);
             break;
 
         case C_LET:
@@ -260,19 +257,19 @@ void rekurzivna_stampa(BCF* korijen, int dubina, int nivo) {
             printf("%d. nivo: identifikator [%s]\n", nivo, korijen->ident);
             break;
 
-        case C_INTID:
+        case C_INT:
             printf("%d. nivo: int konstanta [%d]\n", nivo, korijen->int_value);
             break;
 
-        case C_DBLID:
+        case C_DBL:
             printf("%d. nivo: double konstanta [%lf]\n", nivo, korijen->double_value);
             break;
 
-        case C_STRID:
+        case C_STR:
             printf("%d. nivo: string konstanta [%s]\n", nivo, korijen->string_value);
             break;
 
-        case C_BOOLID:
+        case C_BOOL:
             printf("%d. nivo: bool konstanta [%s]\n", nivo, korijen->bool_value ? "true" : "false");
             break;
 
