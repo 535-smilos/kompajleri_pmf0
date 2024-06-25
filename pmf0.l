@@ -50,13 +50,15 @@ int kolona=1;//karakter u koloni
 "RETURN"    {return T_RETURN;}
 "IN"        {return T_IN;}
 "END"       {return T_END;}
+"true"      {return T_TRUE;}
+"false"      {return T_FALSE;}
+
 
 \"[^"\n]*\"     {char* s=malloc(yyleng-1);strncpy(s, yytext+1, yyleng-2); s[yyleng-2]='\0'; yylval.string_value=s; return T_STR;}    //regularni izrazi
 -?0|[1-9][0-9]*   {yylval.int_value=atoi(yytext);return T_INT;}    //int 
 (0X|0x)[1-9A-Fa-f][0-9A-Fa-f]*   {int a; sscanf(yytext+2, "%x", &a);yylval.hex_value=a; return T_HEX;} //heksadekadni
 -?[0-9]+\.[0-9]* {double num; sscanf(yytext, "%lf", &num);yylval.double_value=num; return T_DOUBLE;} //double
 -?[0-9]+\.[0-9]*[eE][+-]?[0-9]+ {double num; sscanf(yytext, "%lf", &num);yylval.double_exp=num; return T_DBLEXP;} //double sa exp
-"true|false"    {yylval.bool_value=(strcmp(yytext, "true")==0); return T_BOOL;}
 [a-zA-Z_][a-zA-Z0-9_]{0,29}  {yylval.ident=(char*)strdup(yytext); return T_ID;} //identifikator 
 
 "<="        {return T_LEQ;} //operatori

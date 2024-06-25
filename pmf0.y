@@ -2,7 +2,6 @@
     #include "BCF.h"  // Uključite vašu biblioteku BCF
     #include <stdio.h>
     #include <stdlib.h>
-    #include <stdbool.h>
     #include <string.h>
 
     void yyerror(const char* s);  // Prototip funkcije za prijavu grešaka od strane Bison-a
@@ -14,7 +13,6 @@
     double double_value;
     double double_exp;
     int hex_value;
-    bool bool_value;
     char* ident;
     BCF *cvor;
 }
@@ -24,7 +22,6 @@
 %token <double_value>T_DOUBLE
 %token <double_exp>T_DBLEXP
 %token <hex_value>T_HEX
-%token <bool_value>T_BOOL
 %token <string_value>T_STR
 %token <ident> T_ID INT_ID STR_ID BOOL_ID HEX_ID DOUBLE_ID
 %token T_DODJELA
@@ -36,6 +33,7 @@
 %token T_FOR T_WHILE T_BREAK T_IF T_ELSE T_THEN T_RETURN T_FI T_DO T_END
 %token T_EQ
 %token T_SKIP T_LET T_READ T_WRITE T_IN T_TO
+%token T_BOOL T_TRUE T_FALSE
 
 %type <cvor> program declarations decl_list ident_decl comm_seq comm exp constant type
 
@@ -73,10 +71,10 @@ comm_seq:
 
 comm:
     T_SKIP T_SC  { $$ = napravi_skip(); }
-    | T_ID T_DODJELA exp T_SC  { $$ = napravi_dodelu(napravi_identifikator($1), $3); }
+    | T_ID T_DODJELA exp T_SC  { $$ = napravi_dodjelu(napravi_identifikator($1), $3); }
     | T_IF exp T_THEN comm_seq T_ELSE comm_seq T_FI T_SC  { $$ = napravi_if($2, $4, $6); }
     | T_IF exp T_THEN comm_seq T_FI T_SC %prec T_ELSE  { $$ = napravi_if($2, $4, NULL); }
-    | T_FOR T_ID T_DODJELA exp T_TO exp T_DO comm_seq T_END T_SC  { BCF* for_cvor = napravi_dodelu(napravi_identifikator($2), $4); $$ = napravi_for(for_cvor, $6, $8); }
+    | T_FOR T_ID T_DODJELA exp T_TO exp T_DO comm_seq T_END T_SC  { BCF* for_cvor = napravi_dodjelu(napravi_identifikator($2), $4); $$ = napravi_for(for_cvor, $6, $8); }
     | T_WHILE exp T_DO comm_seq T_END T_SC  { $$ = napravi_while($2, $4); }
     | T_READ T_ID T_SC  { $$ = napravi_read(napravi_identifikator($2)); }
     | T_WRITE exp T_SC  { $$ = napravi_write($2); }
@@ -108,7 +106,8 @@ constant:
     | T_DBLEXP  { $$ = napravi_double_konst($1); }
     | T_HEX  { $$ = napravi_int_konst($1); }
     | T_STR  { $$ = napravi_string_konst($1); }
-    | T_BOOL  { $$ = napravi_bool_konst($1); }
+    | T_TRUE { $$ = napravi_bool_konst(1);}
+    | T_FALSE { $$ = napravi_bool_konst(0);}
 ;
 
 type:

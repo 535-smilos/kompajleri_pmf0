@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 typedef struct BCF BCF;
 
@@ -61,21 +60,21 @@ BCF* napravi_let(BCF* deklaracije);
 BCF* napravi_in(BCF* komande);
 BCF* napravi_end();
 BCF* napravi_sekvencu(BCF* prvi, BCF* drugi);
-BCF* napravi_int_konst(int vrednost);
-BCF* napravi_double_konst(double vrednost);
-BCF* napravi_string_konst(char* vrednost);
-BCF* napravi_bool_konst(bool vrednost);
+BCF* napravi_int_konst(int vrijednost);
+BCF* napravi_double_konst(double vrijednost);
+BCF* napravi_string_konst(char* vrijednost);
+BCF* napravi_bool_konst(int vrijednost);
 BCF* napravi_identifikator(char* ime);
-BCF* napravi_binarni_operator(int tip, BCF* levi, BCF* desni);
+BCF* napravi_binarni_operator(int tip, BCF* lijevi, BCF* desni);
 BCF* napravi_unarni_operator(int tip, BCF* cvor);
-BCF* napravi_if(BCF* uslov, BCF* onda_grana, BCF* inace_grana);
-BCF* napravi_while(BCF* uslov, BCF* telo);
-BCF* napravi_for(BCF* init, BCF* uslov, BCF* telo);
-BCF* napravi_dodelu(BCF* levi, BCF* desni);
+BCF* napravi_if(BCF* uslov, BCF* then_grana, BCF* else_grana);
+BCF* napravi_while(BCF* uslov, BCF* tijelo);
+BCF* napravi_for(BCF* init, BCF* uslov, BCF* tijelo);
+BCF* napravi_dodjelu(BCF* lijevi, BCF* desni);
 BCF* napravi_read(BCF* cvor);
 BCF* napravi_write(BCF* cvor);
 BCF* napravi_skip();
-void rekurzivna_stampa(BCF *korijen, int dubina, int nivo);
+void rekurzivna_stampa(BCF *korijen, int nivo);
 void stampaj_stablo(BCF *korijen);
 
 #endif // BCF_H

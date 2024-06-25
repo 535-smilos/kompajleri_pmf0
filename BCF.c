@@ -36,31 +36,31 @@ BCF* napravi_sekvencu(BCF* prvi, BCF* drugi) {
     return cvor;
 }
 
-BCF* napravi_int_konst(int vrednost) {
+BCF* napravi_int_konst(int vrijednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_INT;
-    cvor->int_value = vrednost;
+    cvor->int_value = vrijednost;
     return cvor;
 }
 
-BCF* napravi_double_konst(double vrednost) {
+BCF* napravi_double_konst(double vrijednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_DBL;
-    cvor->double_value = vrednost;
+    cvor->double_value = vrijednost;
     return cvor;
 }
 
-BCF* napravi_string_konst(char* vrednost) {
+BCF* napravi_string_konst(char* vrijednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_STR;
-    cvor->string_value = strdup(vrednost);
+    cvor->string_value = strdup(vrijednost);
     return cvor;
 }
 
-BCF* napravi_bool_konst(bool vrednost) {
+BCF* napravi_bool_konst(int vrijednost) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_BOOL;
-    cvor->bool_value = vrednost;
+    cvor->bool_value = vrijednost;
     return cvor;
 }
 
@@ -112,7 +112,7 @@ BCF* napravi_for(BCF* init, BCF* uslov, BCF* body) {
     return cvor;
 }
 
-BCF* napravi_dodelu(BCF* lijevi, BCF* desni) {
+BCF* napravi_dodjelu(BCF* lijevi, BCF* desni) {
     BCF* cvor = (BCF*)malloc(sizeof(BCF));
     cvor->tip = C_DODJELA;
     cvor->c_binarna_op.lijevi = lijevi;
@@ -140,7 +140,6 @@ BCF* napravi_skip() {
     return cvor;
 }
 
-
 const char* dohvati_ime_operatora(int tip) {
     switch (tip) {
         case C_PLUS: return "+";
@@ -162,71 +161,71 @@ const char* dohvati_ime_operatora(int tip) {
     }
 }
 
-void rekurzivna_stampa(BCF* korijen, int dubina, int nivo) {
+void rekurzivna_stampa(BCF* korijen, int nivo) {
     if (!korijen) return;
-
+    
     switch (korijen->tip) {
         case C_PROGRAM:
-            printf("%d. nivo: PROGRAM\n", nivo);
-            rekurzivna_stampa(korijen->c_program.decl, dubina + 1, nivo + 1);
-            rekurzivna_stampa(korijen->c_program.comm, dubina + 1, nivo + 1);
-            printf("%d. nivo: END\n", nivo);
+            printf("Nivo %d: PROGRAM\n", nivo);
+            rekurzivna_stampa(korijen->c_sek.cvorovi[0], nivo + 1);  
+            rekurzivna_stampa(korijen->c_sek.cvorovi[1], nivo + 1);  
+            printf("Nivo %d: END\n", nivo);
             break;
 
         case C_LET:
-            printf("%d. nivo: LET\n", nivo);
-            rekurzivna_stampa(korijen->c_sek.cvorovi[0], dubina + 1, nivo + 1);
+            printf("Nivo %d: LET\n", nivo);
+            rekurzivna_stampa(korijen->c_sek.cvorovi[0], nivo + 1);
             break;
 
         case C_IN:
-            printf("%d. nivo: IN\n", nivo);
-            rekurzivna_stampa(korijen->c_sek.cvorovi[0], dubina + 1, nivo + 1);
+            printf("Nivo %d: IN\n", nivo);
+            rekurzivna_stampa(korijen->c_sek.cvorovi[0], nivo + 1);
             break;
 
         case C_END:
-            printf("%d. nivo: END\n", nivo);
+            printf("Nivo %d: END\n", nivo);
             break;
 
         case C_SKIP:
-            printf("%d. nivo: SKIP\n", nivo);
+            printf("Nivo %d: SKIP\n", nivo);
             break;
 
         case C_IF:
-            printf("%d. nivo: IF\n", nivo);
-            rekurzivna_stampa(korijen->c_if.cond, dubina + 1, nivo + 1);
-            printf("%d. nivo: THEN\n", nivo + 1);
-            rekurzivna_stampa(korijen->c_if.branch_t, dubina + 2, nivo + 2);
+            printf("Nivo %d: IF\n", nivo);
+            rekurzivna_stampa(korijen->c_if.cond, nivo + 1);
+            printf("Nivo %d: THEN\n", nivo + 1);
+            rekurzivna_stampa(korijen->c_if.branch_t, nivo + 2);
             if (korijen->c_if.branch_e) {
-                printf("%d. nivo: ELSE\n", nivo + 1);
-                rekurzivna_stampa(korijen->c_if.branch_e, dubina + 2, nivo + 2);
+                printf("Nivo %d: ELSE\n", nivo + 1);
+                rekurzivna_stampa(korijen->c_if.branch_e, nivo + 2);
             }
             break;
 
         case C_WHILE:
-            printf("%d. nivo: WHILE\n", nivo);
-            rekurzivna_stampa(korijen->c_while.cond, dubina + 1, nivo + 1);
-            printf("%d. nivo: DO\n", nivo + 1);
-            rekurzivna_stampa(korijen->c_while.body, dubina + 2, nivo + 2);
-            printf("%d. nivo: END\n", nivo);
+            printf("Nivo %d: WHILE\n", nivo);
+            rekurzivna_stampa(korijen->c_while.cond, nivo + 1);
+            printf("Nivo %d: DO\n", nivo + 1);
+            rekurzivna_stampa(korijen->c_while.body, nivo + 2);
+            printf("Nivo %d: END\n", nivo);
             break;
 
         case C_FOR:
-            printf("%d. nivo: FOR\n", nivo);
-            rekurzivna_stampa(korijen->c_for.init, dubina + 1, nivo + 1);
-            printf("%d. nivo: TO\n", nivo + 1);
-            rekurzivna_stampa(korijen->c_for.cond, dubina + 2, nivo + 2);
-            printf("%d. nivo: DO\n", nivo + 1);
-            rekurzivna_stampa(korijen->c_for.for_body, dubina + 2, nivo + 2);
+            printf("Nivo %d: FOR\n", nivo);
+            rekurzivna_stampa(korijen->c_for.init, nivo + 1);
+            printf("Nivo %d: TO\n", nivo + 1);
+            rekurzivna_stampa(korijen->c_for.cond, nivo + 2);
+            printf("Nivo %d: DO\n", nivo + 1);
+            rekurzivna_stampa(korijen->c_for.for_body, nivo + 2);
             break;
 
         case C_READ:
-            printf("%d. nivo: READ\n", nivo);
-            rekurzivna_stampa(korijen->c_unarna_op.cvor, dubina, nivo + 1);
+            printf("Nivo %d: READ\n", nivo);
+            rekurzivna_stampa(korijen->c_unarna_op.cvor, nivo + 1);
             break;
 
         case C_WRITE:
-            printf("%d. nivo: WRITE\n", nivo);
-            rekurzivna_stampa(korijen->c_unarna_op.cvor, dubina, nivo + 1);
+            printf("Nivo %d: WRITE\n", nivo);
+            rekurzivna_stampa(korijen->c_unarna_op.cvor, nivo + 1);
             break;
 
         case C_DODJELA:
@@ -243,47 +242,47 @@ void rekurzivna_stampa(BCF* korijen, int dubina, int nivo) {
         case C_NOTEQ:
         case C_AND:
         case C_OR:
-            printf("%d. nivo: %s\n", nivo, dohvati_ime_operatora(korijen->tip));
-            rekurzivna_stampa(korijen->c_binarna_op.lijevi, dubina + 1, nivo + 1);
-            rekurzivna_stampa(korijen->c_binarna_op.desni, dubina + 1, nivo + 1);
+            printf("Nivo %d: %s\n", nivo, dohvati_ime_operatora(korijen->tip));
+            rekurzivna_stampa(korijen->c_binarna_op.lijevi, nivo + 1);
+            rekurzivna_stampa(korijen->c_binarna_op.desni, nivo + 1);
             break;
 
         case C_NOT:
-            printf("%d. nivo: NOT\n", nivo);
-            rekurzivna_stampa(korijen->c_unarna_op.cvor, dubina + 1, nivo + 1);
+            printf("Nivo %d: NOT\n", nivo);
+            rekurzivna_stampa(korijen->c_unarna_op.cvor, nivo + 1);
             break;
 
         case C_IDENT:
-            printf("%d. nivo: identifikator [%s]\n", nivo, korijen->ident);
+            printf("Nivo %d: identifikator %s\n", nivo, korijen->ident);
             break;
 
         case C_INT:
-            printf("%d. nivo: int konstanta [%d]\n", nivo, korijen->int_value);
+            printf("Nivo %d: int %d\n", nivo, korijen->int_value);
             break;
 
         case C_DBL:
-            printf("%d. nivo: double konstanta [%lf]\n", nivo, korijen->double_value);
+            printf("Nivo %d: double  %lf\n", nivo, korijen->double_value);
             break;
 
         case C_STR:
-            printf("%d. nivo: string konstanta [%s]\n", nivo, korijen->string_value);
+            printf("Nivo %d: string %s\n", nivo, korijen->string_value);
             break;
 
         case C_BOOL:
-            printf("%d. nivo: bool konstanta [%s]\n", nivo, korijen->bool_value ? "true" : "false");
+            printf("Nivo %d: bool %s\n", nivo, korijen->bool_value?"true":"false");
             break;
 
         case C_SEK:
-            rekurzivna_stampa(korijen->c_sek.cvorovi[0], dubina, nivo);
-            rekurzivna_stampa(korijen->c_sek.cvorovi[1], dubina, nivo);
+            rekurzivna_stampa(korijen->c_sek.cvorovi[0], nivo);
+            rekurzivna_stampa(korijen->c_sek.cvorovi[1], nivo);
             break;
 
         default:
-            printf("%d. nivo: NEPOZNAT ČVOR\n", nivo);
+            printf("Nivo %d: Nepoznato\n", nivo);
             break;
     }
 }
 
 void stampaj_stablo(BCF* korijen) {
-    rekurzivna_stampa(korijen, 100, 0);
+    rekurzivna_stampa(korijen, 0);
 }

@@ -44,50 +44,52 @@
      T_DOUBLE = 260,
      T_DBLEXP = 261,
      T_HEX = 262,
-     T_BOOL = 263,
-     T_STR = 264,
-     T_ID = 265,
-     INT_ID = 266,
-     STR_ID = 267,
-     BOOL_ID = 268,
-     HEX_ID = 269,
-     DOUBLE_ID = 270,
-     T_DODJELA = 271,
-     T_PLUS = 272,
-     T_MINUS = 273,
-     T_MUL = 274,
-     T_DIV = 275,
-     T_MOD = 276,
-     T_LESS = 277,
-     T_GREAT = 278,
-     T_LEQ = 279,
-     T_GEQ = 280,
-     T_ISEQ = 281,
-     T_NOTEQ = 282,
-     T_AND = 283,
-     T_OR = 284,
-     T_NOT = 285,
-     T_ZAREZ = 286,
-     T_TACKA = 287,
-     T_LEFTP = 288,
-     T_RIGHTP = 289,
-     T_FOR = 290,
-     T_WHILE = 291,
-     T_BREAK = 292,
-     T_IF = 293,
-     T_ELSE = 294,
-     T_THEN = 295,
-     T_RETURN = 296,
-     T_FI = 297,
-     T_DO = 298,
-     T_END = 299,
-     T_EQ = 300,
-     T_SKIP = 301,
-     T_LET = 302,
-     T_READ = 303,
-     T_WRITE = 304,
-     T_IN = 305,
-     T_TO = 306
+     T_STR = 263,
+     T_ID = 264,
+     INT_ID = 265,
+     STR_ID = 266,
+     BOOL_ID = 267,
+     HEX_ID = 268,
+     DOUBLE_ID = 269,
+     T_DODJELA = 270,
+     T_PLUS = 271,
+     T_MINUS = 272,
+     T_MUL = 273,
+     T_DIV = 274,
+     T_MOD = 275,
+     T_LESS = 276,
+     T_GREAT = 277,
+     T_LEQ = 278,
+     T_GEQ = 279,
+     T_ISEQ = 280,
+     T_NOTEQ = 281,
+     T_AND = 282,
+     T_OR = 283,
+     T_NOT = 284,
+     T_ZAREZ = 285,
+     T_TACKA = 286,
+     T_LEFTP = 287,
+     T_RIGHTP = 288,
+     T_FOR = 289,
+     T_WHILE = 290,
+     T_BREAK = 291,
+     T_IF = 292,
+     T_ELSE = 293,
+     T_THEN = 294,
+     T_RETURN = 295,
+     T_FI = 296,
+     T_DO = 297,
+     T_END = 298,
+     T_EQ = 299,
+     T_SKIP = 300,
+     T_LET = 301,
+     T_READ = 302,
+     T_WRITE = 303,
+     T_IN = 304,
+     T_TO = 305,
+     T_BOOL = 306,
+     T_TRUE = 307,
+     T_FALSE = 308
    };
 #endif
 
@@ -98,21 +100,20 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 11 "pmf0.y"
+#line 10 "pmf0.y"
 
     int int_value;
     char* string_value;
     double double_value;
     double double_exp;
     int hex_value;
-    bool bool_value;
     char* ident;
     BCF *cvor;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 116 "pmf0.tab.h"
+#line 117 "pmf0.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
